@@ -1,0 +1,12 @@
+{
+  "recipe_cost_multiplier": 4.0,
+  "boosters": [
+    {"id":"customer_rush","name":"Customer Rush","cost":120,"description":"One test rush charge"},
+    {"id":"instant_income","name":"Instant Income","cost":180,"description":"One instant income charge"}
+  ],
+  "decorations": [
+    {"id":"potted_plant","name":"Potted Plant","cost":90,"description":"Prototype decoration"},
+    {"id":"warm_lamp","name":"Warm Lamp","cost":140,"description":"Prototype decoration"},
+    {"id":"city_poster","name":"City Poster","cost":220,"description":"Prototype decoration"}
+  ]
+}

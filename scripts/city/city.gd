@@ -6,6 +6,9 @@ func _ready() -> void:
 	var intro := Label.new()
 	intro.text = "Choose a destination — your empire grows from every building."
 	intro.add_theme_font_size_override("font_size", 26)
+	var menu_button := make_button("Save & Main Menu", func() -> void: SaveManager.save_game(); SceneManager.go_to("menu"), Vector2(280, 68))
+	menu_button.set_anchors_preset(Control.PRESET_TOP_RIGHT)
+	body.add_child(menu_button)
 	body.add_child(intro)
 	var grid := GridContainer.new()
 	grid.columns = 4

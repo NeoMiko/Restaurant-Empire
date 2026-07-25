@@ -18,6 +18,8 @@ var status_label: Label
 var upgrade_buttons: Dictionary = {}
 var chef: Node
 var waiter: Node
+var chefs: Array[Node] = []
+var waiters: Array[Node] = []
 
 func _ready() -> void:
 	build_shell("Restaurant")
@@ -54,20 +56,39 @@ func _process(delta: float) -> void:
 		status_label.text = "ACTIVE %d/%d  |  ORDERS %d  |  READY %d  |  SERVED %d" % [_active_count(), customer_pool.size(), order_queue.size(), ready_dishes.size(), int(GameManager.state.stats.get("customers_served", 0))]
 
 func _create_tables() -> void:
-	var positions := [Vector2(330, 240), Vector2(670, 240), Vector2(330, 470), Vector2(670, 470)]
-	for index in positions.size():
-		var table: Node = TABLE_SCRIPT.new()
-		floor_node.add_child(table)
-		table.setup(index, positions[index])
-		tables.append(table)
+	var count: int = min(8, 4 + GameManager.upgrade_level("table_count"))
+	for _index in count:
+		_add_table()
 
 func _create_staff() -> void:
+	for _index in 1 + GameManager.upgrade_level("kitchen_capacity"):
+		_add_chef()
+	for _index in 1 + GameManager.upgrade_level("waiter_capacity"):
+		_add_waiter()
+
+func _add_table() -> void:
+	var positions := [Vector2(330, 200), Vector2(670, 200), Vector2(1010, 200), Vector2(330, 450), Vector2(670, 450), Vector2(1010, 450), Vector2(820, 590), Vector2(1120, 590)]
+	if tables.size() >= positions.size():
+		return
+	var table: Node = TABLE_SCRIPT.new()
+	floor_node.add_child(table)
+	table.setup(tables.size(), positions[tables.size()])
+	tables.append(table)
+
+func _add_chef() -> void:
 	chef = CHEF_SCRIPT.new()
 	floor_node.add_child(chef)
 	chef.setup(self)
+	chef.position += Vector2(100 * chefs.size(), 0)
+	chefs.append(chef)
+
+func _add_waiter() -> void:
 	waiter = WAITER_SCRIPT.new()
 	floor_node.add_child(waiter)
 	waiter.setup(self)
+	waiter.idle_position += Vector2(-90 * waiters.size(), 0)
+	waiter.position = waiter.idle_position
+	waiters.append(waiter)
 
 func _create_customer_pool() -> void:
 	var limit := int(DataManager.balance.simulation.get("spawn_limit", 12))
@@ -117,6 +138,12 @@ func _refresh_upgrades() -> void:
 
 func _buy_upgrade(id: String) -> void:
 	if EconomyManager.purchase_upgrade(id):
+		if id == "table_count":
+			_add_table()
+		elif id == "kitchen_capacity":
+			_add_chef()
+		elif id == "waiter_capacity":
+			_add_waiter()
 		_refresh_upgrades()
 		refresh_currency_bar()
 
@@ -187,7 +214,10 @@ func deliver_dish(order: Dictionary) -> void:
 func customer_paid(customer: Node) -> void:
 	var payment: Dictionary = EconomyManager.calculate_meal_payment(customer.recipe, float(customer.customer_data.get("spend", 1.0)), float(customer.customer_data.get("tip", 1.0)))
 	EconomyManager.add("coins", int(payment.coins), "meal " + str(customer.recipe.name))
-	EconomyManager.add("reputation", 1, "satisfied customer")
+	var reputation_gain := 1
+	if randf() < GameManager.bonus("restaurant_reputation"):
+		reputation_gain += 1
+	EconomyManager.add("reputation", reputation_gain, "satisfied customer")
 	EconomyManager.add_player_xp(int(payment.xp))
 	GameManager.state.stats.customers_served = int(GameManager.state.stats.get("customers_served", 0)) + 1
 	var recipe_id := str(customer.recipe.id)

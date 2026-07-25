@@ -77,6 +77,7 @@ func build_shell(screen_title: String, show_back: bool = true) -> void:
 
 func make_button(text: String, callback: Callable, minimum := Vector2(190, 68)) -> Button:
 	var button := Button.new()
+	button.tooltip_text = text
 	button.text = text
 	button.custom_minimum_size = minimum
 	button.add_theme_font_size_override("font_size", 22)

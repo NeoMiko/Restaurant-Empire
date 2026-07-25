@@ -4,6 +4,7 @@ var balance: Dictionary = {}
 var recipes: Array = []
 var crops: Array = []
 var people: Dictionary = {}
+var shop: Dictionary = {}
 var validation_errors: Array[String] = []
 
 func _enter_tree() -> void:
@@ -11,6 +12,7 @@ func _enter_tree() -> void:
 	recipes = _read_json("res://data/configs/recipes.json", [])
 	crops = _read_json("res://data/configs/crops.json", [])
 	people = _read_json("res://data/configs/people.json", {})
+	shop = _read_json("res://data/configs/shop.json", {})
 	validate_all()
 
 func _read_json(path: String, fallback: Variant) -> Variant:

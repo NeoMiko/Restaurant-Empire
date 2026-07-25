@@ -56,7 +56,7 @@
     {"id":"waiter_speed","name":"Waiter Speed","base":90,"max":50,"value":0.07},
     {"id":"waiter_capacity","name":"Waiter Carry Capacity","base":300,"max":5,"value":1.0},
     {"id":"table_count","name":"Table Count","base":400,"max":4,"value":1.0},
-    {"id":"table_capacity","name":"Table Capacity","base":275,"max":4,"value":1.0},
+    {"id":"table_capacity","name":"Table Capacity","base":275,"max":4,"value":0.1},
     {"id":"customer_patience","name":"Customer Patience","base":80,"max":30,"value":0.06},
     {"id":"meal_value","name":"Meal Value","base":140,"max":50,"value":0.08},
     {"id":"tips","name":"Tips","base":120,"max":40,"value":0.05},

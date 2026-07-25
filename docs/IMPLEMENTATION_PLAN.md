@@ -1,45 +1,40 @@
 # Restaurant Empire — Implementation Plan
 
-## Source
+## Source and target
 
-The implementation follows all four volumes in `Restaurant Empire biblie.docx`.
-The complete document was read: 137 paragraphs and 3 content tables. Target:
-Godot 4.6.3, GDScript, Android landscape, scalable 1920×1080 UI and the GL
-Compatibility mobile renderer.
+Implementation follows all four volumes in `Restaurant Empire biblie.docx`.
+The full 137 paragraphs and three data tables were read. Target: Godot 4.6.3,
+GDScript, Android landscape, 1920×1080 scalable UI, GL Compatibility renderer.
+
+All selected prototype values are centralized in `data/configs/*.json`.
 
 ## Architecture
 
-- Independent screens coordinated by `SceneManager`.
-- Persistent state owned by `GameManager`.
-- Currency mutations routed only through `EconomyManager`.
-- Event signals decouple UI and simulations.
-- JSON balance/content loaded and validated at startup.
-- Versioned save, backup, migration, autosave and lifecycle save.
-- Offline arithmetic capped at eight hours.
-- Restaurant finite-state machines and pooled customers.
-- Placeholder visuals generated in Godot and separate from logic.
+- [x] Independent scenes coordinated by SceneManager.
+- [x] Persistent state owned by GameManager.
+- [x] Currency mutations routed only through EconomyManager.
+- [x] EventBus signals decouple UI and simulations.
+- [x] JSON content loaded and validated at startup.
+- [x] Versioned save, backup, migration, autosave and lifecycle save.
+- [x] Offline arithmetic capped at eight hours.
+- [x] Restaurant FSMs and pooled customers.
+- [x] Generated placeholder visuals separated from gameplay data.
 
-## Delivery stages
+## Stages
 
-- [x] Stage 1: read GDD, verify Godot and define central data.
-- [ ] Stage 2: boot, menu, city, navigation and save.
-- [ ] Stage 3: complete restaurant vertical slice.
-- [ ] Stage 4: garden, fertilisers, Bazaar and Shop.
-- [ ] Stage 5: House/offline, Fairy and Employment Office.
-- [ ] Stage 6: upgrades, settings, HUD and debug tools.
-- [ ] Stage 7: tests, optimisation, docs and final runtime QA.
+- [x] Stage 1: GDD analysis, Godot verification, structure and central data.
+- [x] Stage 2: boot, menu, City, navigation, global HUD and save.
+- [x] Stage 3: restaurant vertical slice and full customer service loop.
+- [x] Stage 4: Garden, fertilisers, Bazaar and Shop.
+- [x] Stage 5: House/offline, Fairy and Employment Office.
+- [x] Stage 6: upgrades, Settings, responsive UI and Debug Panel.
+- [x] Stage 7: data validation, 25 core checks, restaurant smoke and docs.
+- [~] Android APK: preset prepared; local export validator remains blocked.
 
-## Prototype assumptions
+## Verified results
 
-- Burger, Fries and Salad are initially unlocked.
-- Twelve garden plots are visible; six begin unlocked and six come from upgrades.
-- Ingredient cost is deducted as operating cost; crop stock remains optional in
-  this prototype so the core restaurant loop cannot deadlock.
-- Straight-line movement is used on the obstacle-free placeholder floor. Actor
-  FSM APIs can later switch to `NavigationAgent2D`.
-- Offline coins/XP are claimed in the House; crop timers advance on load.
-
-## Verification
-
-After each stage the project is imported and run with the exact executable:
-`C:\Users\Kamil\OneDrive\Escritorio\Godot_v4.6.3-stable_win64.exe`.
+- `Data validation: 0 errors, 10 recipes, 8 crops`
+- `CORE_TESTS_PASS checks=25`
+- `RESTAURANT_SMOKE_PASS served=7 coins=762` (representative final run)
+- Godot editor import and every gameplay scene parse without critical errors.
+- APK was not created; details are recorded in `KNOWN_ISSUES.md`.

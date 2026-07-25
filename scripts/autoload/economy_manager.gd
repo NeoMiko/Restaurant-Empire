@@ -5,7 +5,7 @@ func balance(currency_id: String) -> int:
 
 func add(currency_id: String, amount: int, reason: String = "") -> int:
 	if amount < 0:
-		push_warning("EconomyManager.add rejected negative amount")
+		print("ECONOMY rejected negative add")
 		return balance(currency_id)
 	var currencies: Dictionary = GameManager.state.currencies
 	currencies[currency_id] = max(0, int(currencies.get(currency_id, 0)) + amount)
@@ -66,7 +66,7 @@ func add_player_xp(amount: int) -> void:
 	EventBus.state_changed.emit("player")
 
 func calculate_meal_payment(recipe: Dictionary, spend_multiplier: float, tip_multiplier: float) -> Dictionary:
-	var gross := float(recipe.get("price", 0)) * spend_multiplier * (1.0 + GameManager.bonus("meal_value")) * (1.0 + GameManager.blessing("income"))
+	var gross := float(recipe.get("price", 0)) * spend_multiplier * (1.0 + GameManager.bonus("meal_value")) * (1.0 + GameManager.bonus("table_capacity")) * (1.0 + GameManager.blessing("income"))
 	var net: int = max(1, int(round(gross - float(recipe.get("cost", 0)))))
 	var tip := 0
 	var chance := float(DataManager.balance.economy.get("tip_chance", 0.25))

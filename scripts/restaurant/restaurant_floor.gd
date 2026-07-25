@@ -15,3 +15,8 @@ func _draw() -> void:
 	draw_rect(Rect2(20, 20, 220, 70), Color("#E9C46A"), true)
 	draw_string(font, Vector2(40, 64), "ORDER POINT", HORIZONTAL_ALIGNMENT_LEFT, -1, 22, Color("#1A1A1A"))
 	draw_string(font, Vector2(1100, 800), "WAITER IDLE", HORIZONTAL_ALIGNMENT_LEFT, -1, 20, Color("#333333"))
+	draw_rect(Rect2(95, 110, 90, 100), DataManager.color("cashier"), true)
+	draw_string(font, Vector2(102, 165), "CASHIER", HORIZONTAL_ALIGNMENT_CENTER, 76, 16, Color("#222222"))
+	draw_rect(Rect2(1110, 560, 90, 100), DataManager.color("cleaner"), true)
+	draw_string(font, Vector2(1115, 615), "CLEANER", HORIZONTAL_ALIGNMENT_CENTER, 80, 15, Color("#222222"))
+	draw_string(font, Vector2(1080, 682), "AUTO TABLE RESET", HORIZONTAL_ALIGNMENT_LEFT, -1, 16, Color("#333333"))

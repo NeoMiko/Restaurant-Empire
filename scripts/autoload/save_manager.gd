@@ -60,7 +60,10 @@ func load_game() -> bool:
 func _load_path(path: String) -> Dictionary:
 	if not FileAccess.file_exists(path):
 		return {}
-	var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(path))
+	var parser := JSON.new()
+	if parser.parse(FileAccess.get_file_as_string(path)) != OK:
+		return {}
+	var parsed: Variant = parser.data
 	if parsed is Dictionary and parsed.has("currencies"):
 		return parsed
 	return {}
@@ -86,3 +89,17 @@ func reset_save() -> void:
 func _notification(what: int) -> void:
 	if what == NOTIFICATION_APPLICATION_PAUSED or what == NOTIFICATION_WM_CLOSE_REQUEST:
 		save_game()
+
+func save_snapshot_to_path(path: String, snapshot: Dictionary) -> bool:
+	var file := FileAccess.open(path, FileAccess.WRITE)
+	if file == null:
+		return false
+	file.store_string(JSON.stringify(snapshot))
+	return true
+
+func load_snapshot_from_path(path: String) -> Dictionary:
+	return _load_path(path)
+
+func remove_test_snapshot(path: String) -> void:
+	if FileAccess.file_exists(path):
+		DirAccess.remove_absolute(ProjectSettings.globalize_path(path))

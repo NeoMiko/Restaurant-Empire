@@ -29,6 +29,7 @@ func new_game() -> void:
 		"inventory": {"seeds":seeds,"crops":crops_stock,"fertilisers":{"basic_fertiliser":2,"advanced_fertiliser":1,"instant_fertiliser":0,"garden_time_skip":1},"boosters":{},"decorations":{}},
 		"garden": plots,
 		"staff_collection": {"chef_anna":{"count":1,"level":1},"waiter_leo":{"count":1,"level":1},"cashier_maya":{"count":1,"level":1},"cleaner_max":{"count":1,"level":1}},
+		"garden_last_update_unix": TimeManager.unix_now(),
 		"pity_counter": 0,
 		"active_blessings": {},
 		"offline_pending": {"seconds":0,"coins":0,"xp":0},
