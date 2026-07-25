@@ -1,0 +1,78 @@
+{
+  "schema_version": 1,
+  "simulation": {
+    "spawn_interval": 4.0,
+    "spawn_limit": 12,
+    "menu_read_min": 2.0,
+    "menu_read_max": 4.0,
+    "order_time": 1.2,
+    "eat_min": 5.0,
+    "eat_max": 8.0,
+    "payment_time": 1.0,
+    "cleaning_time": 2.5,
+    "customer_patience": 42.0,
+    "customer_speed": 190.0,
+    "waiter_speed": 250.0,
+    "time_speeds": [1, 2, 5, 10]
+  },
+  "economy": {
+    "starting": {"coins":500,"diamonds":25,"reputation":0,"gacha_tickets":20,"prestige_tokens":0},
+    "upgrade_growth": 1.15,
+    "offline_max_seconds": 28800,
+    "offline_coins_per_minute": 8.0,
+    "offline_xp_per_minute": 0.5,
+    "tip_chance": 0.25,
+    "tip_percent": 0.1
+  },
+  "theme": {
+    "background":"#14222D","panel":"#203645","panel_alt":"#294A55",
+    "accent":"#F1B24A","success":"#6BCB77","danger":"#FF6B6B",
+    "text":"#F4F7F5","muted":"#AFC3C9","customer":"#79D8F2",
+    "chef":"#FF8FA3","waiter":"#8E9BFF","cashier":"#FFD166",
+    "cleaner":"#7AE7C7","table_free":"#8D6E63","table_busy":"#D97757",
+    "kitchen":"#694873","counter":"#C89B7B","locked":"#46535B"
+  },
+  "fertilisers": [
+    {"id":"basic_fertiliser","name":"Basic Fertiliser","cost":35,"reduction":0.25,"currency":"coins"},
+    {"id":"advanced_fertiliser","name":"Advanced Fertiliser","cost":80,"reduction":0.5,"currency":"coins"},
+    {"id":"instant_fertiliser","name":"Instant Fertiliser","cost":3,"reduction":1.0,"currency":"diamonds"},
+    {"id":"garden_time_skip","name":"Garden Time Skip","cost":120,"reduction":0.3,"currency":"coins","global":true}
+  ],
+  "blessings": [
+    {"id":"income","name":"Golden Service","stat":"income","value":0.2,"duration":300,"cost":2},
+    {"id":"customers","name":"Busy Streets","stat":"customers","value":0.2,"duration":300,"cost":2},
+    {"id":"chef_speed","name":"Swift Knives","stat":"chef_speed","value":0.25,"duration":300,"cost":2},
+    {"id":"waiter_speed","name":"Winged Shoes","stat":"waiter_speed","value":0.25,"duration":300,"cost":2},
+    {"id":"crop_yield","name":"Green Moon","stat":"crop_yield","value":0.2,"duration":300,"cost":2},
+    {"id":"tips","name":"Generous Hearts","stat":"tips","value":0.2,"duration":300,"cost":2}
+  ],
+  "gacha": {
+    "single_cost":1,"ten_cost":10,"pity_limit":50,"duplicate_coins":25,
+    "rates":{"Common":0.7,"Rare":0.2,"Epic":0.07,"Legendary":0.025,"Mythic":0.005}
+  },
+  "upgrades": [
+    {"id":"kitchen_speed","name":"Kitchen Speed","base":100,"max":50,"value":0.08},
+    {"id":"kitchen_capacity","name":"Kitchen Capacity","base":250,"max":5,"value":1.0},
+    {"id":"waiter_speed","name":"Waiter Speed","base":90,"max":50,"value":0.07},
+    {"id":"waiter_capacity","name":"Waiter Carry Capacity","base":300,"max":5,"value":1.0},
+    {"id":"table_count","name":"Table Count","base":400,"max":4,"value":1.0},
+    {"id":"table_capacity","name":"Table Capacity","base":275,"max":4,"value":1.0},
+    {"id":"customer_patience","name":"Customer Patience","base":80,"max":30,"value":0.06},
+    {"id":"meal_value","name":"Meal Value","base":140,"max":50,"value":0.08},
+    {"id":"tips","name":"Tips","base":120,"max":40,"value":0.05},
+    {"id":"restaurant_reputation","name":"Restaurant Reputation","base":200,"max":30,"value":0.05},
+    {"id":"garden_plot_count","name":"Garden Plot Count","base":220,"max":6,"value":1.0},
+    {"id":"crop_yield","name":"Crop Yield","base":130,"max":30,"value":0.08},
+    {"id":"offline_earnings","name":"Offline Earnings","base":180,"max":30,"value":0.08}
+  ],
+  "buildings": [
+    {"id":"restaurant","name":"Restaurant","scene":"restaurant","reputation":0,"color":"#E76F51"},
+    {"id":"garden","name":"Garden","scene":"garden","reputation":0,"color":"#6A994E"},
+    {"id":"bazaar","name":"Bazaar","scene":"bazaar","reputation":0,"color":"#DDA15E"},
+    {"id":"shop","name":"Shop","scene":"shop","reputation":0,"color":"#577590"},
+    {"id":"house","name":"House","scene":"house","reputation":0,"color":"#BC6C8E"},
+    {"id":"fairy","name":"Fairy","scene":"fairy","reputation":0,"color":"#9B5DE5"},
+    {"id":"office","name":"Employment Office","scene":"office","reputation":0,"color":"#457B9D"},
+    {"id":"item_shop","name":"Item Shop","scene":"shop","reputation":10,"color":"#F4A261"}
+  ]
+}

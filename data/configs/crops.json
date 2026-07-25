@@ -1,0 +1,10 @@
+[
+  {"id":"lettuce","name":"Lettuce","seed_cost":4,"growth":30.0,"yield":2,"value":6,"used_in":["salad","burger"],"level":1,"color":"#83C760"},
+  {"id":"tomato","name":"Tomato","seed_cost":6,"growth":40.0,"yield":2,"value":8,"used_in":["pizza","pasta","salad"],"level":1,"color":"#E85D5D"},
+  {"id":"cucumber","name":"Cucumber","seed_cost":8,"growth":50.0,"yield":3,"value":10,"used_in":["salad"],"level":2,"color":"#57A773"},
+  {"id":"potato","name":"Potato","seed_cost":9,"growth":60.0,"yield":3,"value":12,"used_in":["fries","soup","pierogi"],"level":2,"color":"#C9A66B"},
+  {"id":"onion","name":"Onion","seed_cost":10,"growth":75.0,"yield":3,"value":14,"used_in":["soup","ramen","pierogi"],"level":3,"color":"#D9C2E9"},
+  {"id":"rice","name":"Rice","seed_cost":20,"growth":120.0,"yield":4,"value":30,"used_in":["sushi"],"level":5,"color":"#F1E7C5"},
+  {"id":"corn","name":"Corn","seed_cost":24,"growth":150.0,"yield":5,"value":36,"used_in":["sides"],"level":7,"color":"#F3D34A"},
+  {"id":"strawberry","name":"Strawberry","seed_cost":30,"growth":180.0,"yield":4,"value":45,"used_in":["dessert"],"level":10,"color":"#F45B69"}
+]

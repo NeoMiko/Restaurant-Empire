@@ -1,0 +1,33 @@
+config_version=5
+
+[application]
+config/name="Restaurant Empire"
+run/main_scene="res://scenes/bootstrap/boot.tscn"
+config/features=PackedStringArray("4.6", "GL Compatibility")
+
+[autoload]
+EventBus="*res://scripts/autoload/event_bus.gd"
+DataManager="*res://scripts/autoload/data_manager.gd"
+TimeManager="*res://scripts/autoload/time_manager.gd"
+GameManager="*res://scripts/autoload/game_manager.gd"
+EconomyManager="*res://scripts/autoload/economy_manager.gd"
+OfflineProgressManager="*res://scripts/autoload/offline_progress_manager.gd"
+SaveManager="*res://scripts/autoload/save_manager.gd"
+SceneManager="*res://scripts/autoload/scene_manager.gd"
+UIManager="*res://scripts/autoload/ui_manager.gd"
+NotificationManager="*res://scripts/autoload/notification_manager.gd"
+AudioManager="*res://scripts/autoload/audio_manager.gd"
+DebugManager="*res://scripts/autoload/debug_manager.gd"
+
+[display]
+window/size/viewport_width=1920
+window/size/viewport_height=1080
+window/size/window_width_override=1280
+window/size/window_height_override=720
+window/stretch/mode="canvas_items"
+window/handheld/orientation=3
+
+[rendering]
+renderer/rendering_method="gl_compatibility"
+renderer/rendering_method.mobile="gl_compatibility"
+environment/defaults/default_clear_color=Color(0.055, 0.071, 0.09, 1)

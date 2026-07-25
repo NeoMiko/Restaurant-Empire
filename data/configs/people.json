@@ -1,0 +1,23 @@
+{
+  "customers": [
+    {"id":"student","name":"Student","patience":0.9,"speed":1.05,"spend":0.8,"tip":0.6,"preferences":["fries","burger"]},
+    {"id":"business","name":"Business Person","patience":0.8,"speed":1.15,"spend":1.25,"tip":1.1,"preferences":["salad","steak"]},
+    {"id":"tourist","name":"Tourist","patience":1.2,"speed":0.9,"spend":1.15,"tip":1.2,"preferences":["pierogi","pizza"]},
+    {"id":"family","name":"Family","patience":1.3,"speed":0.85,"spend":1.1,"tip":1.0,"preferences":["pizza","soup"]},
+    {"id":"vip","name":"VIP","patience":0.7,"speed":1.0,"spend":2.0,"tip":2.0,"preferences":["sushi","steak"]},
+    {"id":"critic","name":"Food Critic","patience":1.0,"speed":1.0,"spend":1.4,"tip":0.8,"preferences":["ramen","steak"]},
+    {"id":"influencer","name":"Influencer","patience":1.1,"speed":1.05,"spend":1.5,"tip":1.4,"preferences":["sushi","salad"]}
+  ],
+  "employees": [
+    {"id":"chef_anna","name":"Anna","role":"Chef","rarity":"Common","speed":1.0,"capacity":1,"passive":"Reliable Prep"},
+    {"id":"waiter_leo","name":"Leo","role":"Waiter","rarity":"Common","speed":1.0,"capacity":1,"passive":"Steady Steps"},
+    {"id":"cashier_maya","name":"Maya","role":"Cashier","rarity":"Common","speed":1.0,"capacity":1,"passive":"Quick Orders"},
+    {"id":"cleaner_max","name":"Max","role":"Cleaner","rarity":"Common","speed":1.0,"capacity":1,"passive":"Clean Sweep"},
+    {"id":"chef_ines","name":"Ines","role":"Chef","rarity":"Rare","speed":1.12,"capacity":1,"passive":"Meal value +5%"},
+    {"id":"waiter_kenji","name":"Kenji","role":"Waiter","rarity":"Rare","speed":1.15,"capacity":2,"passive":"Tips +5%"},
+    {"id":"chef_zara","name":"Zara","role":"Chef","rarity":"Epic","speed":1.3,"capacity":2,"passive":"Cook speed +12%"},
+    {"id":"manager_noah","name":"Noah","role":"Manager","rarity":"Legendary","speed":1.4,"capacity":2,"passive":"Income +15%"},
+    {"id":"chef_sol","name":"Sol","role":"Chef","rarity":"Legendary","speed":1.5,"capacity":2,"passive":"Cook speed +20%"},
+    {"id":"manager_luna","name":"Luna","role":"Manager","rarity":"Mythic","speed":1.75,"capacity":3,"passive":"All stats +25%"}
+  ]
+}

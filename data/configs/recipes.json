@@ -1,0 +1,12 @@
+[
+  {"id":"burger","name":"Burger","category":"Fast Food","cook_time":8.0,"price":50,"cost":16,"ingredients":["beef","bun","lettuce"],"level":1,"reputation":0,"xp":10,"popularity":1.0},
+  {"id":"fries","name":"Fries","category":"Fast Food","cook_time":6.0,"price":25,"cost":7,"ingredients":["potato"],"level":1,"reputation":0,"xp":6,"popularity":1.15},
+  {"id":"salad","name":"Salad","category":"Fresh","cook_time":7.0,"price":40,"cost":11,"ingredients":["lettuce","cucumber","tomato"],"level":1,"reputation":0,"xp":8,"popularity":1.05},
+  {"id":"pizza","name":"Pizza","category":"Italian","cook_time":9.0,"price":110,"cost":34,"ingredients":["dough","tomato","cheese"],"level":5,"reputation":20,"xp":20,"popularity":1.1},
+  {"id":"pasta","name":"Pasta","category":"Italian","cook_time":10.0,"price":140,"cost":42,"ingredients":["wheat","tomato"],"level":8,"reputation":45,"xp":24,"popularity":1.0},
+  {"id":"soup","name":"Soup","category":"Comfort","cook_time":8.0,"price":75,"cost":20,"ingredients":["potato","onion"],"level":4,"reputation":15,"xp":15,"popularity":0.95},
+  {"id":"ramen","name":"Ramen","category":"Asian","cook_time":10.0,"price":220,"cost":68,"ingredients":["noodles","egg","onion"],"level":15,"reputation":100,"xp":35,"popularity":1.15},
+  {"id":"sushi","name":"Sushi","category":"Asian","cook_time":10.0,"price":260,"cost":82,"ingredients":["fish","rice"],"level":18,"reputation":140,"xp":42,"popularity":1.1},
+  {"id":"pierogi","name":"Pierogi","category":"Polish","cook_time":9.0,"price":210,"cost":61,"ingredients":["flour","potato","onion"],"level":20,"reputation":180,"xp":38,"popularity":1.0},
+  {"id":"steak","name":"Steak","category":"Premium","cook_time":10.0,"price":420,"cost":150,"ingredients":["beef"],"level":25,"reputation":250,"xp":60,"popularity":0.8}
+]
