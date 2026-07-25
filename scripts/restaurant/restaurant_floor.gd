@@ -20,3 +20,11 @@ func _draw() -> void:
 	draw_rect(Rect2(1110, 560, 90, 100), DataManager.color("cleaner"), true)
 	draw_string(font, Vector2(1115, 615), "CLEANER", HORIZONTAL_ALIGNMENT_CENTER, 80, 15, Color("#222222"))
 	draw_string(font, Vector2(1080, 682), "AUTO TABLE RESET", HORIZONTAL_ALIGNMENT_LEFT, -1, 16, Color("#333333"))
+	var decoration_positions := [Vector2(1160, 110), Vector2(1240, 110), Vector2(1160, 210), Vector2(1240, 210), Vector2(1160, 310), Vector2(1240, 310)]
+	var placed: Array = GameManager.state.get("placed_decorations", [])
+	for index in min(placed.size(), decoration_positions.size()):
+		var id := str(placed[index])
+		var item := DataManager.get_shop_item("decorations", id)
+		var color := Color("#7AC74F") if id == "potted_plant" else (Color("#FFD166") if id == "warm_lamp" else Color("#4EA5D9"))
+		draw_circle(decoration_positions[index], 28, color)
+		draw_string(font, decoration_positions[index] + Vector2(-55, 50), str(item.get("name", id)), HORIZONTAL_ALIGNMENT_CENTER, 110, 13, Color("#222222"))

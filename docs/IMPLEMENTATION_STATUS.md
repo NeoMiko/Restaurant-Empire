@@ -16,15 +16,17 @@
 - [x] Garden 4×3, sadzenie, timer, harvest i plot unlock.
 - [x] Basic/Advanced/Instant Fertiliser i globalny Garden Time Skip.
 - [x] Bazaar: stan, ilość, sell one/quantity/all, trzy pasma cen.
-- [x] Shop: Seeds, Recipes, Fertilisers, Boosters, Decorations.
+- [x] Shop: Seeds, Recipes, Fertilisers, używalne Boosters i Decorations.
+- [x] Sześć slotów dekoracji, placement/removal i konfigurowalne bonusy pasywne.
+- [x] Prestige: próg, nagroda, reset ekonomii i trwały bonus tokenów.
 - [x] House: limit 8 h, AFK selection i odbiór offline.
 - [x] Fairy: sześć boostów, zapis i offline expiry bez stackowania.
 - [x] Employment Office: 1/10, rarity, pity 50, duplikaty i kolekcja.
 - [x] Save v2, backup, corruption fallback, migracja i lifecycle save.
 - [x] Ukryty Debug Panel oraz x1/x2/x5/x10.
 - [x] Audio buses Music/SFX/UI/Ambient.
-- [x] Startup data validation i testy core/restaurant.
-- [x] Import i runtime test w Godot 4.6.3 bez błędów parsera.
+- [x] Startup data validation, 49 testów core, 11 scen i restaurant smoke.
+- [x] Import i runtime test w Godot 4.6.3 bez błędów parsera ani wycieków.
 
 ## Częściowo ukończone
 
@@ -32,17 +34,17 @@
   placeholder nadal pokazuje jednego reprezentanta grupy.
 - [~] Waiter Carry Capacity tworzy równoległe sloty dostawy zamiast jednej animacji
   kelnera niosącego kilka talerzy.
-- [~] Boostery i dekoracje można kupować/zapisywać; nie ma jeszcze placement mode.
+- [~] Dekoracje działają w sześciu slotach; brak swobodnego przeciągania po sali.
 - [~] Audio routing i ustawienia działają, lecz brak docelowych plików audio.
-- [~] Android preset i środowisko istnieją, lecz lokalny walidator eksportu odrzuca
-  preset bez opisania konkretnego pola; APK nie został utworzony.
+- [~] Android preset i template istnieją, lecz lokalnemu SDK brakuje Command-line
+  Tools latest, CMake 3.10.2.4988404 i NDK 28.1.13356709; APK nie został utworzony.
 
 ## Jeszcze niewykonane (poza zakresem vertical slice)
 
 - [ ] Docelowe sprite’y, animacje, VFX, muzyka i SFX.
 - [ ] NavigationAgent2D dla zatłoczonego finalnego layoutu.
-- [ ] Edytor placement dekoracji i finalny system wielu miejsc przy stole.
-- [ ] Pełny prestige reset i permanentne drzewo tokenów.
+- [ ] Swobodny edytor placement dekoracji i finalny system wielu miejsc przy stole.
+- [ ] Rozbudowane drzewo wydawania Prestige Tokens (sam reset i bonus już działają).
 - [ ] Daily quests, weekly missions, sezony, achievements i live operations.
 - [ ] Telemetria, cloud save, płatności i publikacja sklepu (celowo brak w prototypie).
 - [ ] Podpisany release APK/AAB.

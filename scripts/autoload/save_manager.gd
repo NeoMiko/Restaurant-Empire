@@ -5,6 +5,7 @@ const BACKUP_PATH := "user://restaurant_empire_save.backup.json"
 const CURRENT_VERSION := 2
 var _save_queued := false
 var _autosave_timer: Timer
+var suppress_saves := false
 
 func _ready() -> void:
 	_autosave_timer = Timer.new()
@@ -21,6 +22,8 @@ func new_game() -> void:
 	save_game()
 
 func queue_save() -> void:
+	if suppress_saves:
+		return
 	if _save_queued:
 		return
 	_save_queued = true
@@ -28,6 +31,8 @@ func queue_save() -> void:
 
 func save_game() -> bool:
 	_save_queued = false
+	if suppress_saves:
+		return true
 	GameManager.state.save_version = CURRENT_VERSION
 	GameManager.state.last_save_unix = TimeManager.unix_now()
 	if FileAccess.file_exists(SAVE_PATH):

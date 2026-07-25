@@ -1,6 +1,7 @@
 extends Node
 
 func _ready() -> void:
+	get_node("/root/SaveManager").suppress_saves = true
 	seed(12345)
 	TimeManager.set_speed(10.0)
 	var packed: PackedScene = load("res://scenes/restaurant/restaurant.tscn")

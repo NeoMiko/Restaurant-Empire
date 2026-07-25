@@ -31,7 +31,7 @@ func _tab(name: String) -> VBoxContainer:
 	scroll.add_child(list)
 	return list
 
-func _row(parent: Control, title: String, details: String, button_text: String, callback: Callable, disabled: bool = false) -> void:
+func _row(parent: Control, title: String, details: String, button_text: String, callback: Callable, disabled: bool = false) -> HBoxContainer:
 	var panel := PanelContainer.new()
 	panel.add_theme_stylebox_override("panel", panel_style(DataManager.color("panel"), 10))
 	parent.add_child(panel)
@@ -50,6 +50,7 @@ func _row(parent: Control, title: String, details: String, button_text: String, 
 	var button := make_button(button_text, callback, Vector2(260, 64))
 	button.disabled = disabled
 	row.add_child(button)
+	return row
 
 func _build_seeds() -> void:
 	var list := _tab("Seeds")
@@ -79,10 +80,31 @@ func _build_fertilisers() -> void:
 
 func _build_generic(tab_name: String, category: String, items: Array) -> void:
 	var list := _tab(tab_name)
+	if category == "decorations":
+		var slots := Label.new()
+		slots.text = "PLACED %d / %d" % [GameManager.state.get("placed_decorations", []).size(), int(DataManager.shop.get("decoration_slots", 6))]
+		slots.add_theme_font_size_override("font_size", 24)
+		list.add_child(slots)
 	for item in items:
 		var id := str(item.id)
 		var cost := int(item.cost)
-		_row(list, str(item.name), "%s • owned %d" % [str(item.description), GameManager.item_count(category, id)], "Buy — %d coins" % cost, func() -> void: _buy_item(category, id, cost, "coins"))
+		var owned: int = GameManager.item_count(category, id)
+		var placed_count: int = GameManager.state.get("placed_decorations", []).count(id)
+		var details := "%s • owned %d" % [str(item.description), owned]
+		if category == "decorations":
+			details += " • placed %d" % placed_count
+		var row := _row(list, str(item.name), details, "Buy — %d coins" % cost, func() -> void: _buy_item(category, id, cost, "coins"))
+		if category == "boosters":
+			var use_button := make_button("Use", func() -> void: _use_booster(id), Vector2(150, 64))
+			use_button.disabled = owned <= 0
+			row.add_child(use_button)
+		elif category == "decorations":
+			var place_button := make_button("Place", func() -> void: _place_decoration(id), Vector2(150, 64))
+			place_button.disabled = owned <= placed_count or GameManager.state.get("placed_decorations", []).size() >= int(DataManager.shop.get("decoration_slots", 6))
+			row.add_child(place_button)
+			var remove_button := make_button("Remove", func() -> void: _remove_decoration(id), Vector2(150, 64))
+			remove_button.disabled = placed_count <= 0
+			row.add_child(remove_button)
 
 func _buy_item(category: String, id: String, cost: int, currency: String) -> void:
 	if EconomyManager.spend(currency, cost, "shop " + id):
@@ -90,6 +112,19 @@ func _buy_item(category: String, id: String, cost: int, currency: String) -> voi
 		EventBus.notification_requested.emit("Purchased " + id.replace("_", " ").capitalize(), true)
 		SaveManager.queue_save()
 		refresh_currency_bar()
+		_build_tabs()
+
+func _use_booster(id: String) -> void:
+	if GameManager.activate_booster(id):
+		refresh_currency_bar()
+		_build_tabs()
+
+func _place_decoration(id: String) -> void:
+	if GameManager.place_decoration(id):
+		_build_tabs()
+
+func _remove_decoration(id: String) -> void:
+	if GameManager.remove_decoration(id):
 		_build_tabs()
 
 func _buy_recipe(id: String, cost: int) -> void:

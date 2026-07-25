@@ -65,8 +65,38 @@ func add_player_xp(amount: int) -> void:
 		EventBus.notification_requested.emit("Player level %d" % int(player.level), true)
 	EventBus.state_changed.emit("player")
 
+func prestige_reward() -> int:
+	var config: Dictionary = DataManager.balance.get("prestige", {})
+	var level := int(GameManager.state.get("player", {}).get("restaurant_level", 1))
+	if level < int(config.get("minimum_restaurant_level", 5)):
+		return 0
+	return max(1, int(floor(level / float(config.get("levels_per_token", 5)))))
+
+func perform_prestige() -> int:
+	var reward := prestige_reward()
+	if reward <= 0:
+		EventBus.notification_requested.emit("Restaurant level is too low for Prestige", false)
+		return 0
+	var diamonds := balance("diamonds")
+	var old_tokens := balance("prestige_tokens")
+	var staff: Dictionary = GameManager.state.get("staff_collection", {}).duplicate(true)
+	var player_level := int(GameManager.state.get("player", {}).get("level", 1))
+	var player_xp := int(GameManager.state.get("player", {}).get("xp", 0))
+	GameManager.new_game()
+	GameManager.state.staff_collection = staff
+	GameManager.state.player.level = player_level
+	GameManager.state.player.xp = player_xp
+	GameManager.state.currencies.diamonds = diamonds
+	GameManager.state.currencies.prestige_tokens = old_tokens + reward
+	EventBus.currency_changed.emit("diamonds", diamonds, 0)
+	EventBus.currency_changed.emit("prestige_tokens", old_tokens + reward, reward)
+	EventBus.notification_requested.emit("Prestige complete: +%d tokens" % reward, true)
+	SaveManager.save_game()
+	return reward
+
 func calculate_meal_payment(recipe: Dictionary, spend_multiplier: float, tip_multiplier: float) -> Dictionary:
-	var gross := float(recipe.get("price", 0)) * spend_multiplier * (1.0 + GameManager.bonus("meal_value")) * (1.0 + GameManager.bonus("table_capacity")) * (1.0 + GameManager.blessing("income"))
+	var prestige_multiplier := 1.0 + balance("prestige_tokens") * float(DataManager.balance.get("prestige", {}).get("income_bonus_per_token", 0.05))
+	var gross := float(recipe.get("price", 0)) * spend_multiplier * prestige_multiplier * (1.0 + GameManager.bonus("meal_value")) * (1.0 + GameManager.bonus("table_capacity")) * (1.0 + GameManager.blessing("income"))
 	var net: int = max(1, int(round(gross - float(recipe.get("cost", 0)))))
 	var tip := 0
 	var chance := float(DataManager.balance.economy.get("tip_chance", 0.25))

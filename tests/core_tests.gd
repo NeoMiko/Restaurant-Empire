@@ -4,6 +4,7 @@ var failures := 0
 var checks := 0
 
 func _ready() -> void:
+	get_node("/root/SaveManager").suppress_saves = true
 	seed(20260725)
 	GameManager.new_game()
 	_test_data()
@@ -12,6 +13,8 @@ func _ready() -> void:
 	_test_save_roundtrip()
 	_test_offline_and_crops()
 	_test_gacha_pity()
+	_test_boosters_and_decorations()
+	_test_prestige()
 	await _test_order_queue()
 	await _test_garden_actions()
 	if failures == 0:
@@ -51,9 +54,11 @@ func _test_save_roundtrip() -> void:
 	var path := "user://restaurant_empire_test.json"
 	var snapshot := GameManager.state.duplicate(true)
 	snapshot.currencies.coins = 12345
+	snapshot.placed_decorations = ["potted_plant"]
 	_check(SaveManager.save_snapshot_to_path(path, snapshot), "test snapshot writes")
 	var loaded := SaveManager.load_snapshot_from_path(path)
 	_check(int(loaded.get("currencies", {}).get("coins", 0)) == 12345, "snapshot roundtrip")
+	_check(loaded.get("placed_decorations", []) == ["potted_plant"], "decoration placement persists")
 	var corrupt := FileAccess.open(path, FileAccess.WRITE)
 	corrupt.store_string("{broken")
 	corrupt = null
@@ -79,6 +84,46 @@ func _test_gacha_pity() -> void:
 	_check(office._roll_rarity() == "Legendary", "pity guarantees Legendary")
 	_check(int(GameManager.state.pity_counter) == 0, "pity resets")
 	office.free()
+
+func _test_boosters_and_decorations() -> void:
+	GameManager.new_game()
+	GameManager.add_item("boosters", "customer_rush", 2)
+	_check(GameManager.activate_booster("customer_rush"), "timed booster activates")
+	_check(GameManager.item_count("boosters", "customer_rush") == 1, "timed booster consumes one charge")
+	_check(is_equal_approx(GameManager.blessing("customers"), 0.5), "timed booster exposes configured effect")
+	_check(not GameManager.activate_booster("customer_rush"), "active booster cannot stack")
+	_check(GameManager.item_count("boosters", "customer_rush") == 1, "rejected stack does not consume item")
+	GameManager.add_item("boosters", "instant_income", 1)
+	var coins_before := EconomyManager.balance("coins")
+	_check(GameManager.activate_booster("instant_income"), "instant booster activates")
+	_check(EconomyManager.balance("coins") == coins_before + 500, "instant income uses configured value")
+	GameManager.add_item("decorations", "potted_plant", 2)
+	_check(GameManager.place_decoration("potted_plant"), "owned decoration can be placed")
+	_check(GameManager.place_decoration("potted_plant"), "second owned copy can be placed")
+	_check(is_equal_approx(GameManager.decoration_bonus("customer_patience"), 0.04), "placed decoration bonuses accumulate")
+	_check(not GameManager.place_decoration("potted_plant"), "cannot place unowned copy")
+	_check(GameManager.remove_decoration("potted_plant"), "placed decoration can be removed")
+	_check(is_equal_approx(GameManager.decoration_bonus("customer_patience"), 0.02), "removal updates bonus")
+
+func _test_prestige() -> void:
+	GameManager.new_game()
+	GameManager.state.player.level = 3
+	GameManager.state.player.xp = 40
+	GameManager.state.player.restaurant_level = 10
+	GameManager.state.upgrades.kitchen_speed = 5
+	GameManager.state.unlocked_recipes.append("pizza")
+	GameManager.state.staff_collection["chef_zara"] = {"count":1,"level":1}
+	EconomyManager.add("diamonds", 10, "prestige test")
+	_check(EconomyManager.prestige_reward() == 2, "prestige reward follows configured levels per token")
+	_check(EconomyManager.perform_prestige() == 2, "eligible prestige succeeds")
+	_check(EconomyManager.balance("prestige_tokens") == 2, "prestige tokens granted")
+	_check(EconomyManager.balance("diamonds") == 35, "prestige preserves diamonds")
+	_check(EconomyManager.balance("coins") == 500, "prestige resets coins")
+	_check(GameManager.upgrade_level("kitchen_speed") == 0, "prestige resets upgrades")
+	_check("pizza" not in GameManager.state.unlocked_recipes, "prestige resets advanced recipes")
+	_check(GameManager.state.staff_collection.has("chef_zara"), "prestige preserves staff collection")
+	_check(int(GameManager.state.player.level) == 3 and int(GameManager.state.player.xp) == 40, "prestige preserves player progression")
+	_check(int(GameManager.state.player.restaurant_level) == 1, "prestige resets restaurant level")
 
 func _test_order_queue() -> void:
 	var packed: PackedScene = load("res://scenes/restaurant/restaurant.tscn")

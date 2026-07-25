@@ -38,6 +38,15 @@ a kelnerzy przechodzą `IDLE → TO_COUNTER → TO_TABLE → RETURNING`. Stoliki
 sloty dostawy, a `Table Count` dodaje stoliki w czasie działania. Pozostałe bonusy
 są obliczane przy wejściu w odpowiednią fazę, bez pollingu całej gry.
 
+## Items i Prestige
+
+Shop kupuje przez EconomyManager, a GameManager odpowiada za aktywację boosterów,
+sloty dekoracji i ich bonusy. Czasowy booster używa tego samego modelu końca czasu
+co błogosławieństwa. Najsilniejsza wartość danego typu wygrywa, więc efekty nie
+mnożą się bez kontroli. EconomyManager jest jedyną warstwą mogącą wykonać Prestige:
+wylicza nagrodę, resetuje gospodarkę i zachowuje kolekcję staffu, poziom gracza,
+diamenty oraz dotychczasowe tokeny.
+
 ## Wydajność
 
 Renderer to GL Compatibility. Brak shaderów i tekstur. Klienci są pulowani,

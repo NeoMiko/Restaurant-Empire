@@ -12,7 +12,8 @@ func apply_elapsed(last_save_unix: int) -> Dictionary:
 				plot.status = "READY"
 	var per_minute := float(DataManager.balance.economy.get("offline_coins_per_minute", 8.0))
 	var xp_rate := float(DataManager.balance.economy.get("offline_xp_per_minute", 0.5))
-	var multiplier := 1.0 + GameManager.bonus("offline_earnings") + GameManager.blessing("income")
+	var prestige_bonus := EconomyManager.balance("prestige_tokens") * float(DataManager.balance.get("prestige", {}).get("income_bonus_per_token", 0.05))
+	var multiplier := 1.0 + prestige_bonus + GameManager.bonus("offline_earnings") + GameManager.blessing("income")
 	var reward := {"seconds":elapsed,"coins":int(floor(elapsed / 60.0 * per_minute * multiplier)),"xp":int(floor(elapsed / 60.0 * xp_rate))}
 	GameManager.state.offline_pending = reward
 	return reward

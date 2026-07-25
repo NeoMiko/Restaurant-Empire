@@ -28,13 +28,16 @@ All selected prototype values are centralized in `data/configs/*.json`.
 - [x] Stage 4: Garden, fertilisers, Bazaar and Shop.
 - [x] Stage 5: House/offline, Fairy and Employment Office.
 - [x] Stage 6: upgrades, Settings, responsive UI and Debug Panel.
-- [x] Stage 7: data validation, 25 core checks, restaurant smoke and docs.
-- [~] Android APK: preset prepared; local export validator remains blocked.
+- [x] Stage 7: data validation, 49 core checks, 11-scene matrix, smoke and docs.
+- [x] Continuation: usable boosters, decoration slots and Prestige reset.
+- [~] Android APK: preset prepared; SDK lacks cmdline-tools latest, required CMake and NDK.
 
 ## Verified results
 
 - `Data validation: 0 errors, 10 recipes, 8 crops`
-- `CORE_TESTS_PASS checks=25`
+- `CORE_TESTS_PASS checks=49`
+- `SCENE_MATRIX_PASS scenes=11`
 - `RESTAURANT_SMOKE_PASS served=7 coins=762` (representative final run)
 - Godot editor import and every gameplay scene parse without critical errors.
-- APK was not created; details are recorded in `KNOWN_ISSUES.md`.
+- APK was not created because the machine lacks three required Android SDK components;
+  exact details are recorded in `KNOWN_ISSUES.md`.

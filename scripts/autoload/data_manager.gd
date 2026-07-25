@@ -32,6 +32,8 @@ func validate_all() -> bool:
 	_validate_collection(people.get("customers", []), "customers", ["id", "name", "patience", "spend"])
 	_validate_collection(people.get("employees", []), "employees", ["id", "name", "role", "rarity"])
 	_validate_collection(balance.get("upgrades", []), "upgrades", ["id", "base", "max", "value"])
+	_validate_collection(shop.get("boosters", []), "boosters", ["id", "name", "cost", "effect", "value"])
+	_validate_collection(shop.get("decorations", []), "decorations", ["id", "name", "cost", "stat", "value"])
 	for error in validation_errors:
 		push_error("DATA: " + error)
 	print("Data validation: %d errors, %d recipes, %d crops" % [validation_errors.size(), recipes.size(), crops.size()])
@@ -62,6 +64,9 @@ func get_upgrade(id: String) -> Dictionary:
 
 func get_employee(id: String) -> Dictionary:
 	return _find_by_id(people.get("employees", []), id)
+
+func get_shop_item(category: String, id: String) -> Dictionary:
+	return _find_by_id(shop.get(category, []), id)
 
 func _find_by_id(items: Array, id: String) -> Dictionary:
 	for item in items:

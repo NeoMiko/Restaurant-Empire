@@ -38,9 +38,11 @@ Minimalny hitbox głównych przycisków wynosi 64–82 px przy bazowej rozdzielc
 - Trzynaście ulepszeń z kosztem `base × 1.15^level`.
 - Dziesięć receptur, osiem upraw, 12 pól, nawozy lokalne i globalny time skip.
 - Bazaar z niską/normalną/wysoką ceną oraz sprzedażą ilościową i całościową.
-- Sklep: Seeds, Recipes, Fertilisers, Boosters i Decorations.
+- Sklep: Seeds, Recipes, Fertilisers, używalne Boosters i Decorations.
+- Sześć slotów dekoracji z pasywnymi bonusami do cierpliwości, napiwków i reputacji.
 - Błogosławieństwa zapisane z czasem wygaśnięcia.
 - Gacha 1/10, pity 50, rarity i duplikaty.
+- Prestige od poziomu restauracji 5: reset ekonomii za trwałe tokeny i bonus dochodu.
 - Zapis JSON v2, backup, migracja, autosave i bezpieczne odrzucenie uszkodzeń.
 - Matematyczne naliczanie do ośmiu godzin offline.
 
@@ -67,28 +69,33 @@ powinien zawierać sekretów.
 ```powershell
 $godot = "C:\Users\Kamil\OneDrive\Escritorio\Godot_v4.6.3-stable_win64.exe"
 & $godot --headless --path . res://tests/core_tests.tscn
+& $godot --headless --path . res://tests/scene_matrix.tscn
 & $godot --headless --path . res://tests/restaurant_smoke.tscn
 ```
 
-Oczekiwane wyniki: `CORE_TESTS_PASS checks=25` i
-`RESTAURANT_SMOKE_PASS served>=1 coins>500`.
+Oczekiwane wyniki: `CORE_TESTS_PASS checks=49`,
+`SCENE_MATRIX_PASS scenes=11` i `RESTAURANT_SMOKE_PASS served>=1 coins>500`.
 
 ## Android
 
 Projekt ma preset Android, GL Compatibility, landscape, immersive mode, ARMv7 i
-ARM64. W tej instalacji wykryto SDK, ADB, build-tools, platforms oraz template
-4.6.3, lecz eksport CLI zakończył się ogólnym błędem walidacji presetu i nie
-utworzył APK. Kod gry i pozostałe testy nie są tym blokowane.
+ARM64. Template 4.6.3, ADB, build-tools 35.0.1 i platforma android-35 są obecne.
+Lokalnemu SDK brakuje jednak wymaganych przez Godot 4.6 elementów: Command-line
+Tools `latest`, CMake `3.10.2.4988404` i NDK `28.1.13356709`. Z tego powodu eksport
+CLI poprawnie odrzuca konfigurację i APK nie powstał. Oficjalna lista wymagań:
+https://docs.godotengine.org/en/4.6/tutorials/export/exporting_for_android.html
 
-Aby odtworzyć projekt Gradle w repozytorium:
+Po doinstalowaniu tych składników przez Android Studio można odtworzyć projekt
+Gradle w repozytorium:
 
 ```powershell
 & $godot --headless --path . --install-android-build-template
 ```
 
-Następnie w `Project > Export > Android` sprawdź komunikat walidatora (zwłaszcza
-JDK/SDK i debug keystore), włącz Gradle Build, ustaw min SDK 24 / target SDK 35 i
-uruchom `Export Project`. Alternatywnie po naprawie konfiguracji:
+Następnie w `Editor > Editor Settings > Export > Android` ustaw ścieżki SDK i JDK
+(OpenJDK 17 jest zalecany; obecny JDK 21 jest wspierany), a w
+`Project > Export > Android` zweryfikuj debug keystore. Ustaw min SDK 24 / target
+SDK 35 i uruchom `Export Project`. Alternatywnie po naprawie konfiguracji:
 
 ```powershell
 & $godot --headless --path . --export-debug Android exports/RestaurantEmpire-debug.apk
@@ -105,5 +112,5 @@ edycji logiki.
 ## Znane ograniczenia
 
 Zobacz `docs/KNOWN_ISSUES.md`. Najważniejsze: proste ruchy po linii zamiast
-NavigationAgent2D, brak docelowych assetów/audio, dekoracje nie mają jeszcze trybu
-placement, a eksport APK wymaga rozwiązania walidacji lokalnego presetu.
+NavigationAgent2D, brak docelowych assetów/audio, slotowy zamiast swobodnego tryb
+rozmieszczania dekoracji oraz brakujące składniki lokalnego Android SDK.

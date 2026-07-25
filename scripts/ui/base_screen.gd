@@ -4,6 +4,7 @@ extends Control
 var body: VBoxContainer
 var currency_labels: Dictionary = {}
 var toast_label: Label
+var toast_timer: Timer
 var debug_panel: Control
 
 func build_shell(screen_title: String, show_back: bool = true) -> void:
@@ -67,6 +68,11 @@ func build_shell(screen_title: String, show_back: bool = true) -> void:
 	toast_label.position = Vector2(-360, -110)
 	toast_label.size = Vector2(720, 72)
 	add_child(toast_label)
+	toast_timer = Timer.new()
+	toast_timer.one_shot = true
+	toast_timer.wait_time = 2.5
+	toast_timer.timeout.connect(func() -> void: toast_label.visible = false)
+	add_child(toast_timer)
 
 	var packed: PackedScene = load("res://scenes/ui/debug_panel.tscn")
 	debug_panel = packed.instantiate()
@@ -126,11 +132,7 @@ func _show_toast(message: String, success: bool) -> void:
 	toast_label.text = message
 	toast_label.add_theme_color_override("font_color", DataManager.color("success" if success else "danger"))
 	toast_label.visible = true
-	var token := Time.get_ticks_msec()
-	toast_label.set_meta("token", token)
-	await get_tree().create_timer(2.5).timeout
-	if is_instance_valid(toast_label) and toast_label.get_meta("token") == token:
-		toast_label.visible = false
+	toast_timer.start()
 
 func toggle_debug() -> void:
 	if DebugManager.enabled and is_instance_valid(debug_panel):

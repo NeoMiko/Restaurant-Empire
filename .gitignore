@@ -1,5 +1,6 @@
 .godot/
 tmp/
+.validation/
 exports/
 *.apk
 *.aab

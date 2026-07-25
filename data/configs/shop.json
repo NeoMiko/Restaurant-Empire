@@ -1,12 +1,13 @@
 {
   "recipe_cost_multiplier": 4.0,
+  "decoration_slots": 6,
   "boosters": [
-    {"id":"customer_rush","name":"Customer Rush","cost":120,"description":"One test rush charge"},
-    {"id":"instant_income","name":"Instant Income","cost":180,"description":"One instant income charge"}
+    {"id":"customer_rush","name":"Customer Rush","cost":120,"description":"+50% customer demand for 60 seconds","effect":"timed","stat":"customers","value":0.5,"duration":60},
+    {"id":"instant_income","name":"Instant Income","cost":180,"description":"Immediately grants 500 coins","effect":"currency","currency":"coins","value":500}
   ],
   "decorations": [
-    {"id":"potted_plant","name":"Potted Plant","cost":90,"description":"Prototype decoration"},
-    {"id":"warm_lamp","name":"Warm Lamp","cost":140,"description":"Prototype decoration"},
-    {"id":"city_poster","name":"City Poster","cost":220,"description":"Prototype decoration"}
+    {"id":"potted_plant","name":"Potted Plant","cost":90,"description":"Placed: +2% customer patience","stat":"customer_patience","value":0.02},
+    {"id":"warm_lamp","name":"Warm Lamp","cost":140,"description":"Placed: +2% tips","stat":"tips","value":0.02},
+    {"id":"city_poster","name":"City Poster","cost":220,"description":"Placed: +3% reputation chance","stat":"restaurant_reputation","value":0.03}
   ]
 }

@@ -220,6 +220,8 @@ func customer_paid(customer: Node) -> void:
 	EconomyManager.add("reputation", reputation_gain, "satisfied customer")
 	EconomyManager.add_player_xp(int(payment.xp))
 	GameManager.state.stats.customers_served = int(GameManager.state.stats.get("customers_served", 0)) + 1
+	var customers_per_level := int(DataManager.balance.get("prestige", {}).get("customers_per_restaurant_level", 10))
+	GameManager.state.player.restaurant_level = 1 + int(GameManager.state.stats.customers_served / max(1.0, float(customers_per_level)))
 	var recipe_id := str(customer.recipe.id)
 	GameManager.state.recipe_mastery[recipe_id] = int(GameManager.state.recipe_mastery.get(recipe_id, 0)) + 1
 	EventBus.notification_requested.emit("+%d coins%s" % [int(payment.coins), " (tip %d)" % int(payment.tip) if int(payment.tip) > 0 else ""], true)

@@ -24,6 +24,12 @@
     "tip_chance": 0.25,
     "tip_percent": 0.1
   },
+  "prestige": {
+    "minimum_restaurant_level": 5,
+    "levels_per_token": 5,
+    "customers_per_restaurant_level": 10,
+    "income_bonus_per_token": 0.05
+  },
   "theme": {
     "background":"#14222D","panel":"#203645","panel_alt":"#294A55",
     "accent":"#F1B24A","success":"#6BCB77","danger":"#FF6B6B",
