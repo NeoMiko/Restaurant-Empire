@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.3.1-release-prep — 2026-07-26
+
+- Dodano ekran Legal, Privacy & Credits dostępny z Settings.
+- Dodano pełny notice licencji Godot także wewnątrz aplikacji.
+- Dodano draft polityki prywatności i checklistę Google Play/Data safety/IARC.
+- Wyłączono trzy zbędne uprawnienia sieciowe Android.
+- Rozszerzono matrycę ładowania do 13 scen.
+
 ## 0.3.0-prototype — 2026-07-26
 
 - Usunięto 8 ostrzeżeń intentional signals oraz integer division przy starcie.

@@ -12,6 +12,7 @@ const SCENES := {
 	"office":"res://scenes/office/employment_office.tscn",
 	"progression":"res://scenes/progression/progression.tscn",
 	"settings":"res://scenes/ui/settings.tscn",
+	"legal":"res://scenes/ui/legal.tscn",
 	"loading":"res://scenes/ui/loading_screen.tscn"
 }
 var current_scene_id := "boot"
@@ -50,7 +51,7 @@ func _change(scene_id: String) -> void:
 	_transitioning = false
 
 func go_back() -> void:
-	if current_scene_id == "settings":
+	if current_scene_id == "settings" or current_scene_id == "legal":
 		go_to("menu")
 	elif current_scene_id == "menu":
 		get_tree().quit()

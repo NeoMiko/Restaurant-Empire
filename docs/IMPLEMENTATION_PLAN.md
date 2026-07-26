@@ -34,12 +34,14 @@ All selected prototype values are centralized in `data/configs/*.json`.
 - [x] Expansion 4: Prestige Tree, daily quests, achievements and lifetime stats.
 - [x] Expansion 5: Inventory, active effects panel, tutorial and detailed tooltips.
 - [x] Android debug APK exported and launched in an emulator (user verification).
+- [x] Release preparation: in-app legal screen, Godot notice, privacy draft,
+  minimal Android permissions and Google Play checklist.
 
 ## Verified results
 
 - `Data validation: 0 errors, 10 recipes, 8 crops`
 - `CORE_TESTS_PASS checks=71`
-- `SCENE_MATRIX_PASS scenes=12`
+- `SCENE_MATRIX_PASS scenes=13`
 - `RESTAURANT_SMOKE_PASS served=9 coins=889` (representative final run)
 - Godot editor import and every gameplay scene parse without critical errors.
 - Debug APK exports successfully and was launched in an Android emulator.

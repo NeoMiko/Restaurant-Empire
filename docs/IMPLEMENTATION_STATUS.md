@@ -29,8 +29,11 @@
 - [x] Employment Office: 1/10, rarity, pity 50, duplikaty i kolekcja.
 - [x] Save v2, backup, corruption fallback, migracja i lifecycle save.
 - [x] Ukryty Debug Panel oraz x1/x2/x5/x10.
+- [x] Ekran Legal, Privacy & Credits z opisem prywatności i pełną licencją Godot.
+- [x] Wyłączone zbędne uprawnienia sieciowe w presecie Android.
+- [x] Draft polityki prywatności, third-party notices i checklista Google Play.
 - [x] Audio buses Music/SFX/UI/Ambient.
-- [x] Startup data validation, 71 testów core, 12 scen i restaurant smoke.
+- [x] Startup data validation, 71 testów core, 13 scen i restaurant smoke.
 - [x] Debug APK wyeksportowany i uruchomiony w emulatorze Android.
 - [x] Import i runtime test w Godot 4.6.3 bez błędów parsera ani wycieków.
 
@@ -41,6 +44,8 @@
 - [~] Dekoracje działają w sześciu slotach; brak swobodnego przeciągania po sali.
 - [~] Audio routing i ustawienia działają, lecz brak docelowych plików audio.
 - [~] Debug APK działa w emulatorze; fizyczne urządzenie i release AAB nie były jeszcze testowane.
+- [~] Pakiet publikacyjny jest przygotowany, ale wymaga danych wydawcy, publicznego URL polityki,
+  finalnego package ID oraz decyzji MIT/proprietary.
 
 ## Jeszcze niewykonane (poza zakresem vertical slice)
 
@@ -50,3 +55,5 @@
 - [ ] Weekly missions, sezony i live operations; daily quests i achievements już działają.
 - [ ] Telemetria, cloud save, płatności i publikacja sklepu (celowo brak w prototypie).
 - [ ] Podpisany release APK/AAB.
+- [ ] Uzupełnienie i opublikowanie polityki prywatności oraz deklaracji Play Console.
+- [ ] Weryfikacja nazwy/trademarku i finalnego identyfikatora aplikacji.

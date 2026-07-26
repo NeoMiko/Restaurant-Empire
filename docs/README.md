@@ -32,7 +32,7 @@ Minimalny hitbox głównych przycisków wynosi 64–82 px przy bazowej rozdzielc
 ## Działające systemy
 
 - Main Menu, City, Restaurant, Garden, Bazaar, Shop, House, Fairy, Employment
-  Office, Settings, Loading overlay i Debug Panel.
+  Office, Settings, Legal & Privacy, Loading overlay i Debug Panel.
 - Pula klientów, grupy 1–6 osób oraz FSM od kolejki przez zamówienie i płatność do wyjścia.
 - FIFO kolejki do stolików, prawdziwa liczba miejsc, zamówienia grupowe i kelner z tacą.
 - Cztery startowe stoliki, kolejka kuchni, kucharz, lada i auto-cleaner.
@@ -78,14 +78,15 @@ $godot = "C:\Users\Kamil\OneDrive\Escritorio\Godot_v4.6.3-stable_win64.exe"
 ```
 
 Oczekiwane wyniki: `CORE_TESTS_PASS checks=71`,
-`SCENE_MATRIX_PASS scenes=12` i `RESTAURANT_SMOKE_PASS served>=1 coins>500`.
+`SCENE_MATRIX_PASS scenes=13` i `RESTAURANT_SMOKE_PASS served>=1 coins>500`.
 
 ## Android
 
 Projekt ma działający preset Android, GL Compatibility, landscape, immersive mode,
 ARMv7 i ARM64. Eksport APK został wykonany i uruchomiony w emulatorze Android
 (weryfikacja użytkownika z 2026-07-26). Preset zapisuje debug APK jeden katalog
-powyżej projektu. Do publikacji należy przygotować osobny release keystore i AAB.
+powyżej projektu. Nieużywane uprawnienia sieciowe są wyłączone. Do publikacji
+należy przygotować osobny release keystore i AAB.
 
 Aby odtworzyć opcjonalny projekt Gradle w repozytorium:
 
@@ -101,6 +102,17 @@ SDK 35 i uruchom `Export Project`. Ten sam preset można wywołać z CLI:
 ```powershell
 & $godot --headless --path . --export-debug Android exports/RestaurantEmpire-debug.apk
 ```
+
+## Przygotowanie publikacji
+
+W grze: `Settings → Legal, Privacy & Credits`. Pełne notice licencji Godot jest
+w `docs/THIRD_PARTY_NOTICES.md`. Robocza polityka prywatności znajduje się w
+`docs/PRIVACY_POLICY_DRAFT.md`, a działania wymagane w Google Play w
+`docs/GOOGLE_PLAY_RELEASE_CHECKLIST.md`.
+
+Przed publikacją trzeba uzupełnić nazwę wydawcy, e-mail i publiczny HTTPS URL
+polityki, wybrać docelowy package ID oraz świadomie zdecydować, czy kod gry
+pozostaje na obecnej licencji MIT. Dokumenty nie są poradą prawną.
 
 ## Podmiana placeholderów
 

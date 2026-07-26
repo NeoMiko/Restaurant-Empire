@@ -13,6 +13,7 @@ func _ready() -> void:
 	box.add_child(notifications)
 	box.add_child(make_button("Save Settings", func() -> void: AudioManager.apply_settings(); SaveManager.save_game(); EventBus.notification_requested.emit("Settings saved", true)))
 	box.add_child(make_button("Replay Tutorial", _reset_tutorial))
+	box.add_child(make_button("Legal, Privacy & Credits", func() -> void: SceneManager.go_to("legal")))
 
 func _reset_tutorial() -> void:
 	GameManager.state.tutorial = {"step":0,"completed":false}
