@@ -10,6 +10,7 @@ const SCENES := [
 	"res://scenes/house/house.tscn",
 	"res://scenes/fairy/fairy.tscn",
 	"res://scenes/office/employment_office.tscn",
+	"res://scenes/progression/progression.tscn",
 	"res://scenes/ui/settings.tscn",
 	"res://scenes/ui/loading_screen.tscn"
 ]

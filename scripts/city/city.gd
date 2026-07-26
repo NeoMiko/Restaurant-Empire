@@ -1,5 +1,16 @@
 extends BaseScreen
 
+const TUTORIAL_STEPS := [
+	{"title":"Welcome to Restaurant Empire","text":"This city is your management hub. Start with the Restaurant, where guests arrive automatically and your staff handles the service loop."},
+	{"title":"Restaurant Basics","text":"Watch the queue, kitchen and waiter tray. Earn coins, then buy Kitchen Speed or Table upgrades from the restaurant panel."},
+	{"title":"Grow Ingredients","text":"Visit the Garden, choose a seed and tap an empty plot. Return when the timer reaches READY to harvest ingredients."},
+	{"title":"Trade and Stock Up","text":"Sell crops at the Bazaar when prices are high. The Shop offers seeds, recipes, fertilisers, boosters and decorations."},
+	{"title":"Build Your Team","text":"Use tickets in the Employment Office. Fairy blessings are temporary and continue counting down while the game is closed."},
+	{"title":"Long-Term Progress","text":"The House contains offline rewards and Prestige. Legacy Hall contains permanent upgrades, daily quests and achievements. Your progress saves automatically."}
+]
+
+var tutorial_dialog: ConfirmationDialog
+
 func _ready() -> void:
 	build_shell("City Hub", false)
 	SceneManager.current_scene_id = "city"
@@ -33,6 +44,37 @@ func _ready() -> void:
 		button.pressed.connect(func() -> void: SceneManager.go_to(scene_id))
 		grid.add_child(button)
 	_show_offline_popup()
+	call_deferred("_show_tutorial")
+
+func _show_tutorial() -> void:
+	if bool(GameManager.state.get("tutorial", {}).get("completed", false)):
+		return
+	var step := clampi(int(GameManager.state.tutorial.get("step", 0)), 0, TUTORIAL_STEPS.size() - 1)
+	var item: Dictionary = TUTORIAL_STEPS[step]
+	tutorial_dialog = ConfirmationDialog.new()
+	tutorial_dialog.title = "%d/%d — %s" % [step + 1, TUTORIAL_STEPS.size(), str(item.title)]
+	tutorial_dialog.dialog_text = str(item.text)
+	tutorial_dialog.ok_button_text = "Got it"
+	tutorial_dialog.cancel_button_text = "Later"
+	tutorial_dialog.add_button("Skip Tutorial", true, "skip")
+	tutorial_dialog.confirmed.connect(_advance_tutorial)
+	tutorial_dialog.custom_action.connect(_tutorial_action)
+	add_child(tutorial_dialog)
+	tutorial_dialog.popup_centered(Vector2i(780, 420))
+
+func _advance_tutorial() -> void:
+	var next_step := int(GameManager.state.tutorial.get("step", 0)) + 1
+	GameManager.state.tutorial.step = next_step
+	if next_step >= TUTORIAL_STEPS.size():
+		GameManager.state.tutorial.completed = true
+		EventBus.notification_requested.emit("Tutorial completed", true)
+	SaveManager.queue_save()
+
+func _tutorial_action(action: StringName) -> void:
+	if action == &"skip":
+		GameManager.state.tutorial.completed = true
+		SaveManager.queue_save()
+		tutorial_dialog.hide()
 
 func _show_offline_popup() -> void:
 	var pending: Dictionary = GameManager.state.get("offline_pending", {})

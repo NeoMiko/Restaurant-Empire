@@ -34,6 +34,9 @@ func validate_all() -> bool:
 	_validate_collection(balance.get("upgrades", []), "upgrades", ["id", "base", "max", "value"])
 	_validate_collection(shop.get("boosters", []), "boosters", ["id", "name", "cost", "effect", "value"])
 	_validate_collection(shop.get("decorations", []), "decorations", ["id", "name", "cost", "stat", "value"])
+	_validate_collection(balance.get("prestige_nodes", []), "prestige_nodes", ["id", "name", "stat", "value", "base_cost", "max"])
+	_validate_collection(balance.get("achievements", []), "achievements", ["id", "name", "stat", "target", "reward_currency", "reward"])
+	_validate_collection(balance.get("daily_quests", []), "daily_quests", ["id", "name", "stat", "target", "reward_currency", "reward"])
 	for error in validation_errors:
 		push_error("DATA: " + error)
 	print("Data validation: %d errors, %d recipes, %d crops" % [validation_errors.size(), recipes.size(), crops.size()])
@@ -64,6 +67,15 @@ func get_upgrade(id: String) -> Dictionary:
 
 func get_employee(id: String) -> Dictionary:
 	return _find_by_id(people.get("employees", []), id)
+
+func get_prestige_node(id: String) -> Dictionary:
+	return _find_by_id(balance.get("prestige_nodes", []), id)
+
+func get_achievement(id: String) -> Dictionary:
+	return _find_by_id(balance.get("achievements", []), id)
+
+func get_daily_quest(id: String) -> Dictionary:
+	return _find_by_id(balance.get("daily_quests", []), id)
 
 func get_shop_item(category: String, id: String) -> Dictionary:
 	return _find_by_id(shop.get(category, []), id)

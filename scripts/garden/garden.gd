@@ -131,6 +131,7 @@ func _harvest(plot: Dictionary) -> void:
 	var amount: int = max(1, int(round(float(crop.yield) * (1.0 + GameManager.bonus("crop_yield") + GameManager.blessing("crop_yield")))))
 	GameManager.add_item("crops", str(crop.id), amount)
 	GameManager.state.stats.crops_harvested = int(GameManager.state.stats.get("crops_harvested", 0)) + amount
+	GameManager.state.lifetime_stats.crops_harvested = int(GameManager.state.lifetime_stats.get("crops_harvested", 0)) + amount
 	EventBus.notification_requested.emit("Harvested %d × %s" % [amount, str(crop.name)], true)
 	plot.status = "EMPTY"
 	plot.crop_id = ""

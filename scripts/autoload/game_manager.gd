@@ -22,7 +22,7 @@ func new_game() -> void:
 		"save_version": SAVE_VERSION,
 		"currencies": DataManager.balance.get("economy", {}).get("starting", {}).duplicate(true),
 		"player": {"level":1, "xp":0, "restaurant_level":1},
-		"unlocked_buildings": ["restaurant","garden","bazaar","shop","house","fairy","office"],
+		"unlocked_buildings": ["restaurant","garden","bazaar","shop","house","fairy","office","progression"],
 		"unlocked_recipes": ["burger","fries","salad"],
 		"recipe_mastery": {"burger":0,"fries":0,"salad":0},
 		"upgrades": upgrades,
@@ -33,10 +33,15 @@ func new_game() -> void:
 		"pity_counter": 0,
 		"active_blessings": {},
 		"placed_decorations": [],
+		"prestige_tree": {},
+		"achievements": {},
+		"daily_quests": {"day":-1,"entries":{}},
+		"tutorial": {"step":0,"completed":false},
 		"offline_pending": {"seconds":0,"coins":0,"xp":0},
 		"market": {"day":-1,"multipliers":{}},
 		"settings": {"music":0.7,"sfx":0.8,"notifications":true},
 		"stats": {"customers_served":0,"crops_harvested":0,"coins_earned":0,"angry_customers":0},
+		"lifetime_stats": {"customers_served":0,"crops_harvested":0,"coins_earned":0,"angry_customers":0},
 		"last_save_unix": TimeManager.unix_now()
 	}
 	EventBus.state_changed.emit("all")
@@ -59,7 +64,7 @@ func upgrade_level(id: String) -> int:
 
 func bonus(id: String) -> float:
 	var item := DataManager.get_upgrade(id)
-	return float(upgrade_level(id)) * float(item.get("value", 0.0)) + decoration_bonus(id)
+	return float(upgrade_level(id)) * float(item.get("value", 0.0)) + decoration_bonus(id) + prestige_tree_bonus(id)
 
 func blessing(stat: String) -> float:
 	var now := TimeManager.unix_now()
@@ -130,3 +135,70 @@ func decoration_bonus(stat: String) -> float:
 		if str(item.get("stat", "")) == stat:
 			total += float(item.get("value", 0.0))
 	return total
+
+func prestige_node_level(id: String) -> int:
+	return int(state.get("prestige_tree", {}).get(id, 0))
+
+func prestige_tree_bonus(stat: String) -> float:
+	var total := 0.0
+	for item in DataManager.balance.get("prestige_nodes", []):
+		if str(item.get("stat", "")) == stat:
+			total += prestige_node_level(str(item.id)) * float(item.get("value", 0.0))
+	return total
+
+func progression_stat(stat: String) -> int:
+	if stat == "staff_collected":
+		return state.get("staff_collection", {}).size()
+	if stat == "player_level":
+		return int(state.get("player", {}).get("level", 1))
+	return int(state.get("lifetime_stats", {}).get(stat, 0))
+
+func achievement_progress(id: String) -> int:
+	var item := DataManager.get_achievement(id)
+	return progression_stat(str(item.get("stat", "")))
+
+func claim_achievement(id: String) -> bool:
+	var item := DataManager.get_achievement(id)
+	if item.is_empty() or bool(state.get("achievements", {}).get(id, false)):
+		return false
+	if achievement_progress(id) < int(item.get("target", 1)):
+		EventBus.notification_requested.emit("Achievement is not complete", false)
+		return false
+	state.achievements[id] = true
+	EconomyManager.add(str(item.reward_currency), int(item.reward), "achievement " + id)
+	EventBus.notification_requested.emit("Achievement claimed: " + str(item.name), true)
+	SaveManager.queue_save()
+	return true
+
+func ensure_daily_quests() -> void:
+	var day := int(floor(float(TimeManager.unix_now()) / 86400.0))
+	if int(state.get("daily_quests", {}).get("day", -1)) == day:
+		return
+	var entries: Dictionary = {}
+	for item in DataManager.balance.get("daily_quests", []):
+		entries[str(item.id)] = {"start":progression_stat(str(item.stat)),"claimed":false}
+	state.daily_quests = {"day":day,"entries":entries}
+	EventBus.state_changed.emit("daily_quests")
+	SaveManager.queue_save()
+
+func daily_quest_progress(id: String) -> int:
+	ensure_daily_quests()
+	var item := DataManager.get_daily_quest(id)
+	var entry: Dictionary = state.daily_quests.entries.get(id, {})
+	return max(0, progression_stat(str(item.get("stat", ""))) - int(entry.get("start", 0)))
+
+func claim_daily_quest(id: String) -> bool:
+	ensure_daily_quests()
+	var item := DataManager.get_daily_quest(id)
+	var entry: Dictionary = state.daily_quests.entries.get(id, {})
+	if item.is_empty() or bool(entry.get("claimed", false)):
+		return false
+	if daily_quest_progress(id) < int(item.get("target", 1)):
+		EventBus.notification_requested.emit("Daily quest is not complete", false)
+		return false
+	entry.claimed = true
+	state.daily_quests.entries[id] = entry
+	EconomyManager.add(str(item.reward_currency), int(item.reward), "daily quest " + id)
+	EventBus.notification_requested.emit("Daily reward claimed: " + str(item.name), true)
+	SaveManager.queue_save()
+	return true

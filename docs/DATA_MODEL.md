@@ -2,7 +2,8 @@
 
 ## Konfiguracja
 
-- `balance.json`: czasy, ekonomia, motyw, nawozy, boosty, gacha, ulepszenia i budynki.
+- `balance.json`: czasy, grupy, ekonomia, motyw, nawozy, boosty, gacha, ulepszenia,
+  Prestige Tree, daily quests, achievements i budynki.
 - `recipes.json`: 10 receptur z ID, kategorią, czasem, ceną, kosztem, składnikami,
   levelem, reputacją, XP i popularnością.
 - `crops.json`: 8 roślin z kosztem nasiona, wzrostem, plonem i wartością.
@@ -17,8 +18,9 @@ przejścia z JSON na `.tres` bez zmiany kontraktów gameplayu.
 
 Główne sekcje: `currencies`, `player`, `unlocked_buildings`, `unlocked_recipes`,
 `recipe_mastery`, `upgrades`, `inventory`, `garden`, `staff_collection`,
-`pity_counter`, `active_blessings`, `placed_decorations`, `offline_pending`,
-`market`, `settings`, `stats`, `last_save_unix` i `save_version`.
+`pity_counter`, `active_blessings`, `placed_decorations`, `prestige_tree`,
+`achievements`, `daily_quests`, `tutorial`, `offline_pending`, `market`, `settings`,
+`stats`, `lifetime_stats`, `last_save_unix` i `save_version`.
 
 Pole ogrodu: `{status, crop_id, remaining, fertiliser}`. Czas pozostaje liczbą
 sekund, co umożliwia x10 i arytmetyczny offline bez symulacji każdej sekundy.

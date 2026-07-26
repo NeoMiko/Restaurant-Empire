@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.3.0-prototype — 2026-07-26
+
+- Usunięto 8 ostrzeżeń intentional signals oraz integer division przy starcie.
+- Dodano uczciwą kolejkę FIFO do stolików i grupy 1–6 gości.
+- Table Capacity steruje realną liczbą miejsc; zamówienia, XP i płatności skalują się grupą.
+- Waiter Carry Capacity steruje tacą i dostawą wielu gotowych dań jednym przebiegiem.
+- Dodano Legacy Hall, 5-node Prestige Tree, 3 daily quests i 5 achievements.
+- Dodano lifetime stats zachowywane podczas Prestige oraz trwały claim state.
+- Dodano globalny Inventory, panel aktywnych efektów, tutorial i lepsze tooltipy.
+- Rozszerzono testy do 71 kontroli core i matrycy 12 scen.
+- Potwierdzono działający eksport APK oraz uruchomienie w emulatorze Android.
+
 ## 0.2.0-prototype — 2026-07-25
 
 - Boostery otrzymały działające akcje: czasowy Customer Rush i Instant Income.

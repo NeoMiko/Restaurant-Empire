@@ -11,6 +11,7 @@ var tables: Array[Node] = []
 var customer_pool: Array[Node] = []
 var order_queue: Array[Dictionary] = []
 var ready_dishes: Array[Dictionary] = []
+var waiting_queue: Array[int] = []
 var next_customer_id := 1
 var next_order_id := 1
 var spawn_elapsed := 3.5
@@ -53,7 +54,7 @@ func _process(delta: float) -> void:
 		spawn_elapsed = 0.0
 		spawn_customer()
 	if is_instance_valid(status_label):
-		status_label.text = "ACTIVE %d/%d  |  ORDERS %d  |  READY %d  |  SERVED %d" % [_active_count(), customer_pool.size(), order_queue.size(), ready_dishes.size(), int(GameManager.state.stats.get("customers_served", 0))]
+		status_label.text = "ACTIVE %d/%d | QUEUE %d | ORDERS %d | READY %d | SERVED %d" % [_active_count(), customer_pool.size(), waiting_queue.size(), order_queue.size(), ready_dishes.size(), int(GameManager.state.stats.get("customers_served", 0))]
 
 func _create_tables() -> void:
 	var count: int = min(8, 4 + GameManager.upgrade_level("table_count"))
@@ -63,8 +64,7 @@ func _create_tables() -> void:
 func _create_staff() -> void:
 	for _index in 1 + GameManager.upgrade_level("kitchen_capacity"):
 		_add_chef()
-	for _index in 1 + GameManager.upgrade_level("waiter_capacity"):
-		_add_waiter()
+	_add_waiter()
 
 func _add_table() -> void:
 	var positions := [Vector2(330, 200), Vector2(670, 200), Vector2(1010, 200), Vector2(330, 450), Vector2(670, 450), Vector2(1010, 450), Vector2(820, 590), Vector2(1120, 590)]
@@ -72,7 +72,7 @@ func _add_table() -> void:
 		return
 	var table: Node = TABLE_SCRIPT.new()
 	floor_node.add_child(table)
-	table.setup(tables.size(), positions[tables.size()])
+	table.setup(tables.size(), positions[tables.size()], table_seat_capacity())
 	tables.append(table)
 
 func _add_chef() -> void:
@@ -134,6 +134,14 @@ func _refresh_upgrades() -> void:
 		var maximum := int(item.get("max", 1))
 		var cost := EconomyManager.upgrade_cost(id)
 		upgrade_buttons[id].text = "%s  Lv.%d/%d\n%d coins" % [str(item.name), level, maximum, cost]
+		var current_bonus := float(level) * float(item.get("value", 0.0))
+		var next_bonus := float(min(level + 1, maximum)) * float(item.get("value", 0.0))
+		var effect_text := "Current: %.0f%% • Next: %.0f%%" % [current_bonus * 100.0, next_bonus * 100.0]
+		if id == "table_capacity":
+			effect_text = "Current seats: %d • Next: %d" % [table_seat_capacity(), min(int(DataManager.balance.simulation.get("maximum_group_size", 6)), table_seat_capacity() + 1)]
+		elif id == "waiter_capacity":
+			effect_text = "Current tray: %d dishes • Next: %d" % [1 + level, 1 + min(level + 1, maximum)]
+		upgrade_buttons[id].tooltip_text = "%s\n%s\nCost formula: base × 1.15^level" % [str(item.name), effect_text]
 		upgrade_buttons[id].disabled = level >= maximum
 
 func _buy_upgrade(id: String) -> void:
@@ -142,8 +150,10 @@ func _buy_upgrade(id: String) -> void:
 			_add_table()
 		elif id == "kitchen_capacity":
 			_add_chef()
-		elif id == "waiter_capacity":
-			_add_waiter()
+		elif id == "table_capacity":
+			for table in tables:
+				table.seat_capacity = table_seat_capacity()
+				table.queue_redraw()
 		_refresh_upgrades()
 		refresh_currency_bar()
 
@@ -156,10 +166,30 @@ func spawn_customer() -> void:
 			return
 
 func request_table(customer_id: int) -> Node:
+	if waiting_queue.is_empty() or waiting_queue[0] != customer_id:
+		return null
 	for table in tables:
 		if int(table.state) == 0 and table.reserve(customer_id):
+			waiting_queue.pop_front()
 			return table
 	return null
+
+func join_table_queue(customer_id: int) -> void:
+	if customer_id not in waiting_queue:
+		waiting_queue.append(customer_id)
+
+func leave_table_queue(customer_id: int) -> void:
+	waiting_queue.erase(customer_id)
+
+func queue_position(customer_id: int) -> Vector2:
+	var index := waiting_queue.find(customer_id)
+	if index < 0:
+		return Vector2(680, 90)
+	return Vector2(680 - min(index, 6) * 75, 90)
+
+func table_seat_capacity() -> int:
+	var base := int(DataManager.balance.simulation.get("base_table_capacity", 2))
+	return min(int(DataManager.balance.simulation.get("maximum_group_size", 6)), base + GameManager.upgrade_level("table_capacity"))
 
 func choose_recipe(customer_data: Dictionary) -> Dictionary:
 	var unlocked: Array = GameManager.state.get("unlocked_recipes", [])
@@ -178,11 +208,13 @@ func choose_recipe(customer_data: Dictionary) -> Dictionary:
 			available.append(recipe)
 	return DataManager.get_recipe("burger") if available.is_empty() else available.pick_random()
 
-func place_order(customer_id: int, table_index: int, recipe: Dictionary) -> int:
+func place_order(customer_id: int, table_index: int, recipe: Dictionary, quantity: int = 1) -> int:
 	var order := {
 		"id":next_order_id,"customer_id":customer_id,"table_index":table_index,
 		"recipe_id":str(recipe.id),"recipe_name":str(recipe.name),
-		"cook_time":float(recipe.cook_time),"created_at":TimeManager.unix_now()
+		"quantity":max(1, quantity),
+		"cook_time":float(recipe.cook_time) * (1.0 + max(0, quantity - 1) * float(DataManager.balance.simulation.get("group_cook_time_per_guest", 0.45))),
+		"created_at":TimeManager.unix_now()
 	}
 	order_queue.append(order)
 	next_order_id += 1
@@ -197,13 +229,21 @@ func finish_order(order: Dictionary) -> void:
 	ready_dishes.append(order)
 
 func take_ready_dish() -> Dictionary:
-	if ready_dishes.is_empty():
-		return {}
-	return ready_dishes.pop_front()
+	var batch := take_ready_dishes(1)
+	return {} if batch.is_empty() else batch[0]
+
+func take_ready_dishes(capacity: int) -> Array[Dictionary]:
+	var batch: Array[Dictionary] = []
+	while not ready_dishes.is_empty() and batch.size() < max(1, capacity):
+		batch.append(ready_dishes.pop_front())
+	return batch
 
 func table_for_order(order: Dictionary) -> Node:
 	var index := int(order.get("table_index", -1))
-	return tables[index] if index >= 0 and index < tables.size() else null
+	if index < 0 or index >= tables.size():
+		return null
+	var table: Node = tables[index]
+	return table if int(table.customer_id) == int(order.get("customer_id", -1)) else null
 
 func deliver_dish(order: Dictionary) -> void:
 	for customer in customer_pool:
@@ -212,26 +252,30 @@ func deliver_dish(order: Dictionary) -> void:
 			return
 
 func customer_paid(customer: Node) -> void:
-	var payment: Dictionary = EconomyManager.calculate_meal_payment(customer.recipe, float(customer.customer_data.get("spend", 1.0)), float(customer.customer_data.get("tip", 1.0)))
+	var payment: Dictionary = EconomyManager.calculate_meal_payment(customer.recipe, float(customer.customer_data.get("spend", 1.0)), float(customer.customer_data.get("tip", 1.0)), int(customer.group_size))
 	EconomyManager.add("coins", int(payment.coins), "meal " + str(customer.recipe.name))
 	var reputation_gain := 1
 	if randf() < GameManager.bonus("restaurant_reputation"):
 		reputation_gain += 1
 	EconomyManager.add("reputation", reputation_gain, "satisfied customer")
 	EconomyManager.add_player_xp(int(payment.xp))
-	GameManager.state.stats.customers_served = int(GameManager.state.stats.get("customers_served", 0)) + 1
+	GameManager.state.stats.customers_served = int(GameManager.state.stats.get("customers_served", 0)) + int(customer.group_size)
+	GameManager.state.lifetime_stats.customers_served = int(GameManager.state.lifetime_stats.get("customers_served", 0)) + int(customer.group_size)
 	var customers_per_level := int(DataManager.balance.get("prestige", {}).get("customers_per_restaurant_level", 10))
 	GameManager.state.player.restaurant_level = 1 + int(GameManager.state.stats.customers_served / max(1.0, float(customers_per_level)))
 	var recipe_id := str(customer.recipe.id)
-	GameManager.state.recipe_mastery[recipe_id] = int(GameManager.state.recipe_mastery.get(recipe_id, 0)) + 1
-	EventBus.notification_requested.emit("+%d coins%s" % [int(payment.coins), " (tip %d)" % int(payment.tip) if int(payment.tip) > 0 else ""], true)
+	GameManager.state.recipe_mastery[recipe_id] = int(GameManager.state.recipe_mastery.get(recipe_id, 0)) + int(customer.group_size)
+	EventBus.notification_requested.emit("+%d coins • group x%d%s" % [int(payment.coins), int(customer.group_size), " (tip %d)" % int(payment.tip) if int(payment.tip) > 0 else ""], true)
 	SaveManager.queue_save()
 
 func customer_angry(_customer: Node) -> void:
-	GameManager.state.stats.angry_customers = int(GameManager.state.stats.get("angry_customers", 0)) + 1
+	leave_table_queue(int(_customer.uid))
+	GameManager.state.stats.angry_customers = int(GameManager.state.stats.get("angry_customers", 0)) + int(_customer.group_size)
+	GameManager.state.lifetime_stats.angry_customers = int(GameManager.state.lifetime_stats.get("angry_customers", 0)) + int(_customer.group_size)
 	EventBus.notification_requested.emit("A customer left angry", false)
 
 func recycle_customer(customer: Node) -> void:
+	leave_table_queue(int(customer.uid))
 	customer.deactivate()
 
 func clear_customers() -> void:
@@ -241,6 +285,7 @@ func clear_customers() -> void:
 		table.release_immediately()
 	order_queue.clear()
 	ready_dishes.clear()
+	waiting_queue.clear()
 	EventBus.notification_requested.emit("Restaurant cleared", true)
 
 func _active_count() -> int:

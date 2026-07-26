@@ -30,14 +30,16 @@ All selected prototype values are centralized in `data/configs/*.json`.
 - [x] Stage 6: upgrades, Settings, responsive UI and Debug Panel.
 - [x] Stage 7: data validation, 49 core checks, 11-scene matrix, smoke and docs.
 - [x] Continuation: usable boosters, decoration slots and Prestige reset.
-- [~] Android APK: preset prepared; SDK lacks cmdline-tools latest, required CMake and NDK.
+- [x] Expansion 3: group seating, FIFO entrance queue and multi-dish waiter tray.
+- [x] Expansion 4: Prestige Tree, daily quests, achievements and lifetime stats.
+- [x] Expansion 5: Inventory, active effects panel, tutorial and detailed tooltips.
+- [x] Android debug APK exported and launched in an emulator (user verification).
 
 ## Verified results
 
 - `Data validation: 0 errors, 10 recipes, 8 crops`
-- `CORE_TESTS_PASS checks=49`
-- `SCENE_MATRIX_PASS scenes=11`
-- `RESTAURANT_SMOKE_PASS served=7 coins=762` (representative final run)
+- `CORE_TESTS_PASS checks=71`
+- `SCENE_MATRIX_PASS scenes=12`
+- `RESTAURANT_SMOKE_PASS served=9 coins=889` (representative final run)
 - Godot editor import and every gameplay scene parse without critical errors.
-- APK was not created because the machine lacks three required Android SDK components;
-  exact details are recorded in `KNOWN_ISSUES.md`.
+- Debug APK exports successfully and was launched in an Android emulator.

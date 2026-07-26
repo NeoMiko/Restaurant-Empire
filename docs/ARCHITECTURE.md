@@ -29,9 +29,11 @@ bezpośrednio. Dane wizualne nie są wejściem dla logiki.
 
 ## Restaurant
 
-Restaurant posiada kolejkę zamówień i kolejkę gotowych dań. Pula 12 klientów
-unika ciągłej alokacji. Każdy klient ma enum z 11 stanami. Kucharze pobierają FIFO,
-a kelnerzy przechodzą `IDLE → TO_COUNTER → TO_TABLE → RETURNING`. Stoliki mają
+Restaurant posiada FIFO kolejki wejściowej, zamówień i gotowych dań. Pula 12
+reprezentantów grup unika ciągłej alokacji. Każda grupa ma 1–6 osób i FSM z 11
+stanami. Kucharze pobierają FIFO, a kelner rezerwuje partię dań do pojemności tacy
+i odwiedza kolejne stoliki w stanach `IDLE → TO_COUNTER → TO_TABLE → RETURNING`.
+Stoliki mają realną liczbę miejsc oraz stany
 `FREE/RESERVED/OCCUPIED/WAITING_FOR_CLEANING/CLEANING`.
 
 `Kitchen Capacity` tworzy równoległych kucharzy, `Waiter Capacity` równoległe
@@ -46,6 +48,14 @@ co błogosławieństwa. Najsilniejsza wartość danego typu wygrywa, więc efekt
 mnożą się bez kontroli. EconomyManager jest jedyną warstwą mogącą wykonać Prestige:
 wylicza nagrodę, resetuje gospodarkę i zachowuje kolekcję staffu, poziom gracza,
 diamenty oraz dotychczasowe tokeny.
+
+## Meta progression i UX
+
+`GameManager` przechowuje Prestige Tree, lifetime stats, achievement claims,
+dzienny baseline questów oraz tutorial. EconomyManager pozostaje jedyną ścieżką
+wydawania i przyznawania walut. Legacy Hall jest zwykłą sceną konsumującą dane z
+`balance.json`. BaseScreen zapewnia wspólny Inventory i panel efektów bez duplikacji
+w każdej scenie.
 
 ## Wydajność
 

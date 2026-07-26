@@ -12,6 +12,12 @@ func _ready() -> void:
 	notifications.toggled.connect(func(value: bool) -> void: GameManager.state.settings.notifications = value; SaveManager.queue_save())
 	box.add_child(notifications)
 	box.add_child(make_button("Save Settings", func() -> void: AudioManager.apply_settings(); SaveManager.save_game(); EventBus.notification_requested.emit("Settings saved", true)))
+	box.add_child(make_button("Replay Tutorial", _reset_tutorial))
+
+func _reset_tutorial() -> void:
+	GameManager.state.tutorial = {"step":0,"completed":false}
+	SaveManager.queue_save()
+	EventBus.notification_requested.emit("Tutorial will restart in City", true)
 
 func _add_slider(parent: Control, label_text: String, key: String) -> void:
 	var row := HBoxContainer.new()

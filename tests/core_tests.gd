@@ -15,6 +15,7 @@ func _ready() -> void:
 	_test_gacha_pity()
 	_test_boosters_and_decorations()
 	_test_prestige()
+	_test_progression_systems()
 	await _test_order_queue()
 	await _test_garden_actions()
 	if failures == 0:
@@ -113,6 +114,9 @@ func _test_prestige() -> void:
 	GameManager.state.upgrades.kitchen_speed = 5
 	GameManager.state.unlocked_recipes.append("pizza")
 	GameManager.state.staff_collection["chef_zara"] = {"count":1,"level":1}
+	GameManager.state.prestige_tree["golden_register"] = 2
+	GameManager.state.tutorial = {"step":6,"completed":true}
+	GameManager.state.lifetime_stats.customers_served = 123
 	EconomyManager.add("diamonds", 10, "prestige test")
 	_check(EconomyManager.prestige_reward() == 2, "prestige reward follows configured levels per token")
 	_check(EconomyManager.perform_prestige() == 2, "eligible prestige succeeds")
@@ -122,18 +126,60 @@ func _test_prestige() -> void:
 	_check(GameManager.upgrade_level("kitchen_speed") == 0, "prestige resets upgrades")
 	_check("pizza" not in GameManager.state.unlocked_recipes, "prestige resets advanced recipes")
 	_check(GameManager.state.staff_collection.has("chef_zara"), "prestige preserves staff collection")
+	_check(GameManager.prestige_node_level("golden_register") == 2, "prestige preserves purchased legacy nodes")
+	_check(bool(GameManager.state.tutorial.completed), "prestige preserves tutorial state")
+	_check(int(GameManager.state.lifetime_stats.customers_served) == 123, "prestige preserves lifetime statistics")
 	_check(int(GameManager.state.player.level) == 3 and int(GameManager.state.player.xp) == 40, "prestige preserves player progression")
 	_check(int(GameManager.state.player.restaurant_level) == 1, "prestige resets restaurant level")
+
+func _test_progression_systems() -> void:
+	GameManager.new_game()
+	EconomyManager.add("prestige_tokens", 10, "progression test")
+	_check(EconomyManager.prestige_node_cost("golden_register") == 1, "prestige node uses configured base cost")
+	_check(EconomyManager.purchase_prestige_node("golden_register"), "prestige node purchase succeeds")
+	_check(GameManager.prestige_node_level("golden_register") == 1, "prestige node level stored")
+	_check(is_equal_approx(GameManager.prestige_tree_bonus("meal_value"), 0.05), "prestige tree exposes permanent bonus")
+	_check(EconomyManager.balance("prestige_tokens") == 9, "prestige node spends tokens through economy manager")
+	GameManager.state.lifetime_stats.customers_served = 1
+	var diamonds_before := EconomyManager.balance("diamonds")
+	_check(GameManager.claim_achievement("first_service"), "completed achievement can be claimed")
+	_check(EconomyManager.balance("diamonds") == diamonds_before + 3, "achievement grants configured currency")
+	_check(not GameManager.claim_achievement("first_service"), "achievement reward cannot be claimed twice")
+	GameManager.ensure_daily_quests()
+	GameManager.state.lifetime_stats.customers_served += 8
+	var tickets_before := EconomyManager.balance("gacha_tickets")
+	_check(GameManager.daily_quest_progress("daily_service") == 8, "daily quest measures progress from daily baseline")
+	_check(GameManager.claim_daily_quest("daily_service"), "completed daily quest can be claimed")
+	_check(EconomyManager.balance("gacha_tickets") == tickets_before + 2, "daily quest grants configured reward")
+	_check(not GameManager.claim_daily_quest("daily_service"), "daily reward cannot be claimed twice")
 
 func _test_order_queue() -> void:
 	var packed: PackedScene = load("res://scenes/restaurant/restaurant.tscn")
 	var restaurant: Node = packed.instantiate()
 	add_child(restaurant)
 	await get_tree().process_frame
+	restaurant.clear_customers()
+	restaurant.join_table_queue(100)
+	restaurant.join_table_queue(200)
+	_check(restaurant.request_table(200) == null, "table queue preserves FIFO fairness")
+	var first_table: Node = restaurant.request_table(100)
+	_check(first_table != null, "first queued group receives free table")
+	first_table.release_immediately()
+	_check(restaurant.request_table(200) != null, "next group advances after assignment")
 	var recipe := DataManager.get_recipe("burger")
-	var order_id: int = restaurant.place_order(999, 0, recipe)
+	var order_id: int = restaurant.place_order(999, 0, recipe, 3)
 	var order: Dictionary = restaurant.take_next_order()
 	_check(order_id > 0 and int(order.id) == order_id, "restaurant FIFO order queue")
+	_check(int(order.quantity) == 3 and float(order.cook_time) > float(recipe.cook_time), "group order scales quantity and cook time")
+	var second_id: int = restaurant.place_order(998, 1, recipe, 2)
+	var second_order: Dictionary = restaurant.take_next_order()
+	_check(int(second_order.id) == second_id, "second order remains FIFO")
+	restaurant.finish_order(order)
+	restaurant.finish_order(second_order)
+	_check(restaurant.take_ready_dishes(2).size() == 2, "waiter tray takes configured batch")
+	var single_payment := EconomyManager.calculate_meal_payment(recipe, 1.0, 0.0, 1)
+	var group_payment := EconomyManager.calculate_meal_payment(recipe, 1.0, 0.0, 3)
+	_check(int(group_payment.coins) > int(single_payment.coins), "group payment scales with guests")
 	restaurant.queue_free()
 	await get_tree().process_frame
 

@@ -19,6 +19,7 @@ var table: Node
 var recipe: Dictionary = {}
 var order_id := -1
 var satisfaction := 1.0
+var group_size := 1
 
 func activate(controller: Node, new_uid: int, data: Dictionary) -> void:
 	restaurant = controller
@@ -34,6 +35,8 @@ func activate(controller: Node, new_uid: int, data: Dictionary) -> void:
 	recipe = {}
 	order_id = -1
 	satisfaction = 1.0
+	var maximum_group: int = min(int(restaurant.table_seat_capacity()), int(DataManager.balance.simulation.get("maximum_group_size", 6)))
+	group_size = randi_range(1, max(1, maximum_group))
 	state = CustomerState.SPAWNING
 	add_to_group("customer")
 	set_process(true)
@@ -62,8 +65,11 @@ func _process(delta: float) -> void:
 				state = CustomerState.ENTERING
 		CustomerState.ENTERING:
 			if _move(step):
+				restaurant.join_table_queue(uid)
 				state = CustomerState.WAITING_FOR_TABLE
 		CustomerState.WAITING_FOR_TABLE:
+			target = restaurant.queue_position(uid)
+			_move(step)
 			table = restaurant.request_table(uid)
 			if table != null:
 				target = table.customer_position()
@@ -82,7 +88,7 @@ func _process(delta: float) -> void:
 			timer -= step
 			if timer <= 0.0:
 				recipe = restaurant.choose_recipe(customer_data)
-				order_id = restaurant.place_order(uid, table.table_index, recipe)
+				order_id = restaurant.place_order(uid, table.table_index, recipe, group_size)
 				state = CustomerState.WAITING_FOR_FOOD
 		CustomerState.WAITING_FOR_FOOD:
 			pass
@@ -114,6 +120,7 @@ func _move(step: float) -> bool:
 	return position.distance_to(target) <= 5.0
 
 func _become_angry() -> void:
+	restaurant.leave_table_queue(uid)
 	satisfaction = 0.0
 	if table != null:
 		table.release_immediately()
@@ -124,9 +131,9 @@ func _become_angry() -> void:
 func _draw() -> void:
 	var color := DataManager.color("danger") if state == CustomerState.ANGRY_LEAVING else DataManager.color("customer")
 	draw_circle(Vector2.ZERO, 30, color)
-	draw_string(ThemeDB.fallback_font, Vector2(-55, 55), "%s #%d" % [STATE_NAMES[state], uid], HORIZONTAL_ALIGNMENT_CENTER, 110, 14, Color("#1A1A1A"))
+	draw_string(ThemeDB.fallback_font, Vector2(-65, 55), "%s #%d • x%d" % [STATE_NAMES[state], uid, group_size], HORIZONTAL_ALIGNMENT_CENTER, 130, 14, Color("#1A1A1A"))
 	if active and state < CustomerState.EATING:
-		var max_patience := float(DataManager.balance.simulation.get("customer_patience", 42.0)) * float(customer_data.get("patience", 1.0))
+		var max_patience := float(DataManager.balance.simulation.get("customer_patience", 42.0)) * float(customer_data.get("patience", 1.0)) * (1.0 + GameManager.bonus("customer_patience"))
 		var fraction: float = clamp(patience / max(0.1, max_patience), 0.0, 1.0)
 		draw_rect(Rect2(-35, -47, 70, 8), Color("#5A2222"), true)
 		draw_rect(Rect2(-35, -47, 70 * fraction, 8), DataManager.color("success"), true)

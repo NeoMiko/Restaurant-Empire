@@ -22,6 +22,7 @@ backup oraz postęp offline.
 - Mysz lub dotyk: wszystkie akcje.
 - Android Back / przycisk `← City`: powrót do City.
 - `F12` lub przycisk `DEBUG` w buildzie debug: panel deweloperski.
+- `BAG`: zapisany ekwipunek; `Effects`: aktywne boosty, dekoracje i Legacy.
 - `Speed x1/x2/x5/x10`: szybkość symulacji restauracji i aktywnego ogrodu.
 - City → `Save & Main Menu`: bezpieczny zapis i wyjście do menu.
 
@@ -32,8 +33,9 @@ Minimalny hitbox głównych przycisków wynosi 64–82 px przy bazowej rozdzielc
 
 - Main Menu, City, Restaurant, Garden, Bazaar, Shop, House, Fairy, Employment
   Office, Settings, Loading overlay i Debug Panel.
-- Pula klientów oraz FSM od wejścia przez zamówienie, jedzenie i płatność do wyjścia.
-- Cztery startowe stoliki, kolejka zamówień, kucharz, lada, FSM kelnera i auto-cleaner.
+- Pula klientów, grupy 1–6 osób oraz FSM od kolejki przez zamówienie i płatność do wyjścia.
+- FIFO kolejki do stolików, prawdziwa liczba miejsc, zamówienia grupowe i kelner z tacą.
+- Cztery startowe stoliki, kolejka kuchni, kucharz, lada i auto-cleaner.
 - Monety, diamenty, reputacja, bilety gacha i tokeny prestiżu przez EconomyManager.
 - Trzynaście ulepszeń z kosztem `base × 1.15^level`.
 - Dziesięć receptur, osiem upraw, 12 pól, nawozy lokalne i globalny time skip.
@@ -42,7 +44,9 @@ Minimalny hitbox głównych przycisków wynosi 64–82 px przy bazowej rozdzielc
 - Sześć slotów dekoracji z pasywnymi bonusami do cierpliwości, napiwków i reputacji.
 - Błogosławieństwa zapisane z czasem wygaśnięcia.
 - Gacha 1/10, pity 50, rarity i duplikaty.
-- Prestige od poziomu restauracji 5: reset ekonomii za trwałe tokeny i bonus dochodu.
+- Prestige od poziomu restauracji 5 oraz Legacy Hall z pięcioma trwałymi ulepszeniami.
+- Trzy daily quests, pięć achievements i trwałe statystyki między resetami.
+- Globalny Inventory, panel aktywnych efektów oraz sześciostopniowy tutorial.
 - Zapis JSON v2, backup, migracja, autosave i bezpieczne odrzucenie uszkodzeń.
 - Matematyczne naliczanie do ośmiu godzin offline.
 
@@ -73,20 +77,17 @@ $godot = "C:\Users\Kamil\OneDrive\Escritorio\Godot_v4.6.3-stable_win64.exe"
 & $godot --headless --path . res://tests/restaurant_smoke.tscn
 ```
 
-Oczekiwane wyniki: `CORE_TESTS_PASS checks=49`,
-`SCENE_MATRIX_PASS scenes=11` i `RESTAURANT_SMOKE_PASS served>=1 coins>500`.
+Oczekiwane wyniki: `CORE_TESTS_PASS checks=71`,
+`SCENE_MATRIX_PASS scenes=12` i `RESTAURANT_SMOKE_PASS served>=1 coins>500`.
 
 ## Android
 
-Projekt ma preset Android, GL Compatibility, landscape, immersive mode, ARMv7 i
-ARM64. Template 4.6.3, ADB, build-tools 35.0.1 i platforma android-35 są obecne.
-Lokalnemu SDK brakuje jednak wymaganych przez Godot 4.6 elementów: Command-line
-Tools `latest`, CMake `3.10.2.4988404` i NDK `28.1.13356709`. Z tego powodu eksport
-CLI poprawnie odrzuca konfigurację i APK nie powstał. Oficjalna lista wymagań:
-https://docs.godotengine.org/en/4.6/tutorials/export/exporting_for_android.html
+Projekt ma działający preset Android, GL Compatibility, landscape, immersive mode,
+ARMv7 i ARM64. Eksport APK został wykonany i uruchomiony w emulatorze Android
+(weryfikacja użytkownika z 2026-07-26). Preset zapisuje debug APK jeden katalog
+powyżej projektu. Do publikacji należy przygotować osobny release keystore i AAB.
 
-Po doinstalowaniu tych składników przez Android Studio można odtworzyć projekt
-Gradle w repozytorium:
+Aby odtworzyć opcjonalny projekt Gradle w repozytorium:
 
 ```powershell
 & $godot --headless --path . --install-android-build-template
@@ -95,7 +96,7 @@ Gradle w repozytorium:
 Następnie w `Editor > Editor Settings > Export > Android` ustaw ścieżki SDK i JDK
 (OpenJDK 17 jest zalecany; obecny JDK 21 jest wspierany), a w
 `Project > Export > Android` zweryfikuj debug keystore. Ustaw min SDK 24 / target
-SDK 35 i uruchom `Export Project`. Alternatywnie po naprawie konfiguracji:
+SDK 35 i uruchom `Export Project`. Ten sam preset można wywołać z CLI:
 
 ```powershell
 & $godot --headless --path . --export-debug Android exports/RestaurantEmpire-debug.apk
@@ -112,5 +113,5 @@ edycji logiki.
 ## Znane ograniczenia
 
 Zobacz `docs/KNOWN_ISSUES.md`. Najważniejsze: proste ruchy po linii zamiast
-NavigationAgent2D, brak docelowych assetów/audio, slotowy zamiast swobodnego tryb
-rozmieszczania dekoracji oraz brakujące składniki lokalnego Android SDK.
+NavigationAgent2D, grupy przedstawiane przez jedną kapsułę, brak docelowych
+assetów/audio i slotowy zamiast swobodnego tryb rozmieszczania dekoracji.

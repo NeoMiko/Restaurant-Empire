@@ -13,6 +13,9 @@
     "customer_patience": 42.0,
     "customer_speed": 190.0,
     "waiter_speed": 250.0,
+    "base_table_capacity": 2,
+    "maximum_group_size": 6,
+    "group_cook_time_per_guest": 0.45,
     "time_speeds": [1, 2, 5, 10]
   },
   "economy": {
@@ -28,8 +31,28 @@
     "minimum_restaurant_level": 5,
     "levels_per_token": 5,
     "customers_per_restaurant_level": 10,
-    "income_bonus_per_token": 0.05
+    "income_bonus_per_token": 0.05,
+    "node_cost_growth": 1.7
   },
+  "prestige_nodes": [
+    {"id":"golden_register","name":"Golden Register","description":"Permanent meal value","stat":"meal_value","value":0.05,"base_cost":1,"max":10},
+    {"id":"patient_crowds","name":"Patient Crowds","description":"Permanent customer patience","stat":"customer_patience","value":0.08,"base_cost":1,"max":8},
+    {"id":"lucky_tips","name":"Lucky Tips","description":"Permanent tip value","stat":"tips","value":0.08,"base_cost":2,"max":8},
+    {"id":"rich_soil","name":"Rich Soil","description":"Permanent crop yield","stat":"crop_yield","value":0.10,"base_cost":2,"max":6},
+    {"id":"deep_rest","name":"Deep Rest","description":"Permanent offline earnings","stat":"offline_earnings","value":0.10,"base_cost":2,"max":6}
+  ],
+  "achievements": [
+    {"id":"first_service","name":"First Service","description":"Serve your first guest","stat":"customers_served","target":1,"reward_currency":"diamonds","reward":3},
+    {"id":"busy_room","name":"Busy Room","description":"Serve 50 guests","stat":"customers_served","target":50,"reward_currency":"diamonds","reward":8},
+    {"id":"green_thumb","name":"Green Thumb","description":"Harvest 25 crops","stat":"crops_harvested","target":25,"reward_currency":"gacha_tickets","reward":5},
+    {"id":"first_thousand","name":"First Thousand","description":"Earn 1,000 coins","stat":"coins_earned","target":1000,"reward_currency":"diamonds","reward":5},
+    {"id":"staff_roster","name":"Staff Roster","description":"Collect 6 different employees","stat":"staff_collected","target":6,"reward_currency":"gacha_tickets","reward":8}
+  ],
+  "daily_quests": [
+    {"id":"daily_service","name":"Daily Service","description":"Serve 8 guests today","stat":"customers_served","target":8,"reward_currency":"gacha_tickets","reward":2},
+    {"id":"daily_harvest","name":"Daily Harvest","description":"Harvest 6 crops today","stat":"crops_harvested","target":6,"reward_currency":"coins","reward":120},
+    {"id":"daily_income","name":"Daily Income","description":"Earn 500 coins today","stat":"coins_earned","target":500,"reward_currency":"diamonds","reward":2}
+  ],
   "theme": {
     "background":"#14222D","panel":"#203645","panel_alt":"#294A55",
     "accent":"#F1B24A","success":"#6BCB77","danger":"#FF6B6B",
@@ -79,6 +102,7 @@
     {"id":"house","name":"House","scene":"house","reputation":0,"color":"#BC6C8E"},
     {"id":"fairy","name":"Fairy","scene":"fairy","reputation":0,"color":"#9B5DE5"},
     {"id":"office","name":"Employment Office","scene":"office","reputation":0,"color":"#457B9D"},
-    {"id":"item_shop","name":"Item Shop","scene":"shop","reputation":10,"color":"#F4A261"}
+    {"id":"item_shop","name":"Item Shop","scene":"shop","reputation":10,"color":"#F4A261"},
+    {"id":"progression","name":"Legacy Hall","scene":"progression","reputation":0,"color":"#6D597A"}
   ]
 }
