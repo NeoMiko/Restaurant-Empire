@@ -9,4 +9,4 @@ func format_number(value: int) -> String:
 
 func format_time(seconds: float) -> String:
 	var total: int = max(0, int(ceil(seconds)))
-	return "%02d:%02d" % [total / 60, total % 60]
+	return "%02d:%02d" % [int(floor(total / 60.0)), total % 60]
