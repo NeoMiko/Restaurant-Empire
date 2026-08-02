@@ -31,20 +31,18 @@ func _tab(name: String) -> VBoxContainer:
 	scroll.add_child(list)
 	return list
 
-func _row(parent: Control, title: String, details: String, button_text: String, callback: Callable, disabled: bool = false) -> HBoxContainer:
-	var panel := PanelContainer.new()
-	panel.add_theme_stylebox_override("panel", panel_style(DataManager.color("panel"), 10))
-	parent.add_child(panel)
-	var row := HBoxContainer.new()
-	panel.add_child(row)
+func _row(parent: Control, icon_id: String, title: String, details: String, button_text: String, callback: Callable, disabled: bool = false) -> HBoxContainer:
+	var row := art_row(parent, icon_id)
 	var title_label := Label.new()
 	title_label.text = title
-	title_label.custom_minimum_size.x = 350
+	title_label.custom_minimum_size.x = 330
+	title_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	title_label.add_theme_font_size_override("font_size", 24)
 	row.add_child(title_label)
 	var detail_label := Label.new()
 	detail_label.text = details
 	detail_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	detail_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	detail_label.add_theme_color_override("font_color", DataManager.color("muted"))
 	row.add_child(detail_label)
 	var button := make_button(button_text, callback, Vector2(260, 64))
@@ -57,7 +55,7 @@ func _build_seeds() -> void:
 	for crop in DataManager.crops:
 		var id := str(crop.id)
 		var cost := int(crop.seed_cost)
-		_row(list, str(crop.name) + " Seed", "Owned %d • grows %s" % [GameManager.item_count("seeds", id), UIManager.format_time(float(crop.growth))], "Buy — %d coins" % cost, func() -> void: _buy_item("seeds", id, cost, "coins"))
+		_row(list, id, str(crop.name) + " Seed", "Owned %d • grows %s" % [GameManager.item_count("seeds", id), UIManager.format_time(float(crop.growth))], "Buy — %d coins" % cost, func() -> void: _buy_item("seeds", id, cost, "coins"))
 
 func _build_recipes() -> void:
 	var list := _tab("Recipes")
@@ -68,7 +66,7 @@ func _build_recipes() -> void:
 		var cost := int(round(float(recipe.price) * multiplier))
 		var gated: bool = int(GameManager.state.player.level) < int(recipe.level) or EconomyManager.balance("reputation") < int(recipe.reputation)
 		var detail := "Lv.%d • %d ★ • sells %d" % [int(recipe.level), int(recipe.reputation), int(recipe.price)]
-		_row(list, str(recipe.name), detail, "OWNED" if owned else "Unlock — %d" % cost, func() -> void: _buy_recipe(id, cost), owned or gated)
+		_row(list, id, str(recipe.name), detail, "OWNED" if owned else "Unlock — %d" % cost, func() -> void: _buy_recipe(id, cost), owned or gated)
 
 func _build_fertilisers() -> void:
 	var list := _tab("Fertilisers")
@@ -76,15 +74,20 @@ func _build_fertilisers() -> void:
 		var id := str(item.id)
 		var currency := str(item.get("currency", "coins"))
 		var cost := int(item.cost)
-		_row(list, str(item.name), "Owned %d • reduces %.0f%%" % [GameManager.item_count("fertilisers", id), float(item.reduction) * 100.0], "Buy — %d %s" % [cost, currency], func() -> void: _buy_item("fertilisers", id, cost, currency))
+		_row(list, id, str(item.name), "Owned %d • reduces %.0f%%" % [GameManager.item_count("fertilisers", id), float(item.reduction) * 100.0], "Buy — %d %s" % [cost, currency], func() -> void: _buy_item("fertilisers", id, cost, currency))
 
 func _build_generic(tab_name: String, category: String, items: Array) -> void:
 	var list := _tab(tab_name)
 	if category == "decorations":
+		var header := HBoxContainer.new()
+		header.add_theme_constant_override("separation", 10)
+		list.add_child(header)
+		header.add_child(ArtManager.icon_rect("slot_filled", Vector2(44, 44)))
 		var slots := Label.new()
 		slots.text = "PLACED %d / %d" % [GameManager.state.get("placed_decorations", []).size(), int(DataManager.shop.get("decoration_slots", 6))]
+		slots.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 		slots.add_theme_font_size_override("font_size", 24)
-		list.add_child(slots)
+		header.add_child(slots)
 	for item in items:
 		var id := str(item.id)
 		var cost := int(item.cost)
@@ -93,7 +96,7 @@ func _build_generic(tab_name: String, category: String, items: Array) -> void:
 		var details := "%s • owned %d" % [str(item.description), owned]
 		if category == "decorations":
 			details += " • placed %d" % placed_count
-		var row := _row(list, str(item.name), details, "Buy — %d coins" % cost, func() -> void: _buy_item(category, id, cost, "coins"))
+		var row := _row(list, id, str(item.name), details, "Buy — %d coins" % cost, func() -> void: _buy_item(category, id, cost, "coins"))
 		if category == "boosters":
 			var use_button := make_button("Use", func() -> void: _use_booster(id), Vector2(150, 64))
 			use_button.disabled = owned <= 0

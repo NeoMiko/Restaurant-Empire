@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="880" height="680" viewBox="0 0 220 170">
+<defs>
+<linearGradient id="k1-stone" x1="0" y1="0" x2="1" y2=".3"><stop offset="0" stop-color="#A89C86"></stop><stop offset=".55" stop-color="#7A7062"></stop><stop offset="1" stop-color="#4E463A"></stop></linearGradient>
+<radialGradient id="k1-fire" cx=".5" cy=".85" r=".8"><stop offset="0" stop-color="#FFE9A8"></stop><stop offset=".35" stop-color="#F3B02E"></stop><stop offset=".7" stop-color="#D4541E"></stop><stop offset="1" stop-color="#8E2418"></stop></radialGradient>
+<radialGradient id="k1-glow" cx=".5" cy=".8" r=".6"><stop offset="0" stop-color="#FFB84A" stop-opacity=".55"></stop><stop offset="1" stop-color="#FFB84A" stop-opacity="0"></stop></radialGradient>
+</defs>
+<path d="M14 158 L206 158 L206 62 L14 62 Z" fill="url(#k1-stone)"></path>
+<g stroke="#463E32" stroke-width="1.5" opacity=".55"><path d="M14 88 L206 88 M14 114 L206 114 M14 140 L206 140 M50 62 L50 88 M96 62 L96 88 M146 62 L146 88 M186 62 L186 88 M36 88 L36 114 M78 88 L78 114 M126 88 L126 114 M172 88 L172 114"></path></g>
+<path d="M8 62 L110 20 L212 62 L206 70 L110 32 L14 70 Z" fill="#8A8072"></path>
+<path d="M44 158 L44 96 L176 96 L176 158 Z" fill="#1A1208"></path>
+<ellipse cx="110" cy="150" rx="90" ry="30" fill="url(#k1-glow)"></ellipse>
+<path d="M56 158 Q62 116 110 114 Q158 116 164 158 Z" fill="url(#k1-fire)"></path>
+<path d="M74 158 q4 -30 22 -38 q-4 16 6 20 q8 -12 4 -26 q26 18 24 44 Z" fill="#FFD87A" opacity=".85" style="animation:flicker 1.1s ease-in-out infinite;transform-origin:110px 158px"></path>
+<path d="M92 158 q2 -18 14 -22 q10 6 12 22 Z" fill="#FFF2C8" opacity=".9" style="animation:flicker .8s ease-in-out infinite;transform-origin:110px 158px"></path>
+<g stroke="#3A2A16" stroke-width="7" stroke-linecap="round"><path d="M56 152 L164 152"></path><path d="M64 148 L152 156"></path></g>
+<path d="M62 68 L158 68 L158 82 L62 82 Z" fill="#5E5648"></path>
+<path d="M84 68 L84 96 M136 68 L136 96" stroke="#3E382C" stroke-width="4"></path>
+<path d="M92 96 L128 96 L124 118 L96 118 Z" fill="#4E463A" stroke="#2E2A20" stroke-width="2"></path>
+<path d="M110 44 q-8 -16 2 -26 M124 48 q6 -14 16 -12" fill="none" stroke="#D8CCB4" stroke-width="6.5" stroke-linecap="round" opacity=".55" style="animation:steam 3s ease-out infinite"></path>
+</svg>

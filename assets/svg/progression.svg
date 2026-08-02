@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="831" viewBox="0 0 260 240">
+<defs>
+<linearGradient id="p1-stone" x1="0" y1="0" x2="1" y2=".3"><stop offset="0" stop-color="#C8BCA4"></stop><stop offset=".5" stop-color="#9A8F7E"></stop><stop offset="1" stop-color="#5E564A"></stop></linearGradient>
+<linearGradient id="p1-col" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#DCD2BC"></stop><stop offset=".35" stop-color="#AEA492"></stop><stop offset="1" stop-color="#645C50"></stop></linearGradient>
+<linearGradient id="p1-roof" x1="0" y1="0" x2=".4" y2="1"><stop offset="0" stop-color="#8E74A8"></stop><stop offset=".5" stop-color="#5E4478"></stop><stop offset="1" stop-color="#33204A"></stop></linearGradient>
+<linearGradient id="p1-gold" x1="0" y1="0" x2=".3" y2="1"><stop offset="0" stop-color="#FBE7A8"></stop><stop offset=".45" stop-color="#E0A32E"></stop><stop offset="1" stop-color="#8A5C12"></stop></linearGradient>
+</defs>
+<ellipse cx="130" cy="224" rx="106" ry="12" fill="#0E0904" opacity=".45"></ellipse>
+<path d="M26 196 L234 196 L234 216 L26 216 Z" fill="url(#p1-stone)"></path>
+<path d="M34 184 L226 184 L226 196 L34 196 Z" fill="#AEA492"></path>
+<g><rect x="48" y="96" fill="url(#p1-col)"></rect><rect x="44" y="88" rx="3" fill="#CFC5AE"></rect><g stroke="#7A7264" stroke-width="1.4" opacity=".5"><path d="M55 98 L55 184 M65 98 L65 184"></path></g></g>
+<g><rect x="98" y="96" fill="url(#p1-col)"></rect><rect x="94" y="88" rx="3" fill="#CFC5AE"></rect><g stroke="#7A7264" stroke-width="1.4" opacity=".5"><path d="M105 98 L105 184 M115 98 L115 184"></path></g></g>
+<g><rect x="148" y="96" fill="url(#p1-col)"></rect><rect x="144" y="88" rx="3" fill="#CFC5AE"></rect><g stroke="#7A7264" stroke-width="1.4" opacity=".5"><path d="M155 98 L155 184 M165 98 L165 184"></path></g></g>
+<g><rect x="198" y="96" fill="url(#p1-col)"></rect><rect x="194" y="88" rx="3" fill="#CFC5AE"></rect><g stroke="#7A7264" stroke-width="1.4" opacity=".5"><path d="M205 98 L205 184 M215 98 L215 184"></path></g></g>
+<path d="M118 184 L118 122 A24 24 0 0 1 166 122 L166 184 Z" fill="#2E2418" opacity=".85"></path>
+<path d="M30 74 L230 74 L230 90 L30 90 Z" fill="url(#p1-stone)"></path>
+<path d="M18 78 L130 18 L242 78 Z" fill="url(#p1-roof)"></path>
+<path d="M130 18 L242 78 L130 78 Z" fill="#000" opacity=".18"></path>
+<path d="M18 78 L130 18 L242 78" fill="none" stroke="#241634" stroke-width="4" stroke-linejoin="round"></path>
+<path d="M112 30 L112 6 L122 16 L130 -2 L138 16 L148 6 L148 30 Z" fill="url(#p1-gold)" stroke="#6E4A0E" stroke-width="2" stroke-linejoin="round"></path>
+<circle cx="130" cy="152" r="19" fill="url(#p1-gold)" stroke="#6E4A0E" stroke-width="2.4"></circle>
+<circle cx="130" cy="152" r="11" fill="none" stroke="#8A5C12" stroke-width="2.4" opacity=".8"></circle>
+<ellipse cx="122" cy="144" rx="5" ry="3.4" fill="#FFF" opacity=".5" transform="rotate(-35 122 144)"></ellipse>
+</svg>

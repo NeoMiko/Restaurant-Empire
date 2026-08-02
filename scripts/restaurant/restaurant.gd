@@ -32,7 +32,7 @@ func _ready() -> void:
 	var floor_holder := PanelContainer.new()
 	floor_holder.custom_minimum_size = Vector2(1380, 850)
 	floor_holder.clip_contents = true
-	floor_holder.add_theme_stylebox_override("panel", panel_style(Color("#F4E1C1"), 12))
+	floor_holder.add_theme_stylebox_override("panel", panel_style(DataManager.color("parchment"), 12, 4))
 	split.add_child(floor_holder)
 	var floor_control := Control.new()
 	floor_control.custom_minimum_size = Vector2(1360, 850)
@@ -67,7 +67,12 @@ func _create_staff() -> void:
 	_add_waiter()
 
 func _add_table() -> void:
-	var positions := [Vector2(330, 200), Vector2(670, 200), Vector2(1010, 200), Vector2(330, 450), Vector2(670, 450), Vector2(1010, 450), Vector2(820, 590), Vector2(1120, 590)]
+	## Two rows of four. Spacing is set by the table sprite's footprint plus its name plaque,
+	## and keeps clear of the kitchen (below y 575) and the decoration column (beyond x 1130).
+	var positions := [
+		Vector2(300, 240), Vector2(520, 240), Vector2(740, 240), Vector2(960, 240),
+		Vector2(300, 430), Vector2(520, 430), Vector2(740, 430), Vector2(960, 430)
+	]
 	if tables.size() >= positions.size():
 		return
 	var table: Node = TABLE_SCRIPT.new()
@@ -75,11 +80,14 @@ func _add_table() -> void:
 	table.setup(tables.size(), positions[tables.size()], table_seat_capacity())
 	tables.append(table)
 
+## Cooks fill a 3-wide, 2-row grid inside the kitchen zone — kitchen_capacity tops out at 5,
+## so six cooks is the most that ever has to fit.
 func _add_chef() -> void:
 	chef = CHEF_SCRIPT.new()
 	floor_node.add_child(chef)
 	chef.setup(self)
-	chef.position += Vector2(100 * chefs.size(), 0)
+	var slot := chefs.size()
+	chef.position = Vector2(320 + (slot % 3) * 90, 680 + floori(slot / 3.0) * 88)
 	chefs.append(chef)
 
 func _add_waiter() -> void:
@@ -115,13 +123,18 @@ func _build_upgrade_panel(parent: HBoxContainer) -> void:
 	list.custom_minimum_size.x = 400
 	list.add_theme_constant_override("separation", 10)
 	scroll.add_child(list)
-	var heading := Label.new()
-	heading.text = "UPGRADES"
-	heading.add_theme_font_size_override("font_size", 28)
+	var heading := HBoxContainer.new()
+	heading.add_theme_constant_override("separation", 10)
 	list.add_child(heading)
+	heading.add_child(ArtManager.icon_rect("ui_wax_seal_star", Vector2(44, 44)))
+	var heading_label := Label.new()
+	heading_label.text = "UPGRADES"
+	heading_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	heading_label.add_theme_font_size_override("font_size", 28)
+	heading.add_child(heading_label)
 	for item in DataManager.balance.get("upgrades", []):
 		var id := str(item.id)
-		var button := make_button("", func() -> void: _buy_upgrade(id), Vector2(390, 72))
+		var button := make_button("", func() -> void: _buy_upgrade(id), Vector2(390, 82), ArtManager.upgrade_icon(id), 52)
 		button.add_theme_font_size_override("font_size", 17)
 		upgrade_buttons[id] = button
 		list.add_child(button)
@@ -181,11 +194,13 @@ func join_table_queue(customer_id: int) -> void:
 func leave_table_queue(customer_id: int) -> void:
 	waiting_queue.erase(customer_id)
 
+## Guests line up leftwards from the entrance door drawn at x=860. Spacing has to clear the
+## per-guest caption, which is wider than the guest sprite.
 func queue_position(customer_id: int) -> Vector2:
 	var index := waiting_queue.find(customer_id)
 	if index < 0:
-		return Vector2(680, 90)
-	return Vector2(680 - min(index, 6) * 75, 90)
+		return Vector2(860, 130)
+	return Vector2(860 - min(index, 6) * 115, 130)
 
 func table_seat_capacity() -> int:
 	var base := int(DataManager.balance.simulation.get("base_table_capacity", 2))

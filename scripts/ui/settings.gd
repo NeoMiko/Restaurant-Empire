@@ -3,7 +3,7 @@ extends BaseScreen
 func _ready() -> void:
 	build_shell("Settings")
 	SceneManager.current_scene_id = "settings"
-	var box := titled_panel("Audio & Interface")
+	var box := titled_panel("Audio & Interface", "btn_settings")
 	_add_slider(box, "Music", "music")
 	_add_slider(box, "SFX", "sfx")
 	var notifications := CheckButton.new()
@@ -11,9 +11,9 @@ func _ready() -> void:
 	notifications.button_pressed = bool(GameManager.state.settings.get("notifications", true))
 	notifications.toggled.connect(func(value: bool) -> void: GameManager.state.settings.notifications = value; SaveManager.queue_save())
 	box.add_child(notifications)
-	box.add_child(make_button("Save Settings", func() -> void: AudioManager.apply_settings(); SaveManager.save_game(); EventBus.notification_requested.emit("Settings saved", true)))
-	box.add_child(make_button("Replay Tutorial", _reset_tutorial))
-	box.add_child(make_button("Legal, Privacy & Credits", func() -> void: SceneManager.go_to("legal")))
+	box.add_child(make_button("Save Settings", func() -> void: AudioManager.apply_settings(); SaveManager.save_game(); EventBus.notification_requested.emit("Settings saved", true), Vector2(320, 68), "toast_check", 40))
+	box.add_child(make_button("Replay Tutorial", _reset_tutorial, Vector2(320, 68), "city_poster", 40))
+	box.add_child(make_button("Legal, Privacy & Credits", func() -> void: SceneManager.go_to("legal"), Vector2(360, 68), "ui_wax_seal_star", 40))
 
 func _reset_tutorial() -> void:
 	GameManager.state.tutorial = {"step":0,"completed":false}

@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="880" height="680" viewBox="0 0 220 170">
+<defs><linearGradient id="pl-pot" x1="0" y1="0" x2="1" y2=".3"><stop offset="0" stop-color="#D45940"></stop><stop offset=".55" stop-color="#A6301F"></stop><stop offset="1" stop-color="#6E1E12"></stop></linearGradient><linearGradient id="pl-leaf" x1="0" y1="0" x2=".4" y2="1"><stop offset="0" stop-color="#A8CC5E"></stop><stop offset=".5" stop-color="#6E8C3A"></stop><stop offset="1" stop-color="#3E5A1E"></stop></linearGradient></defs>
+<ellipse cx="110" cy="152" rx="46" ry="9" fill="#8A6A38" opacity=".4"></ellipse>
+<path d="M78 148 L142 148 L132 96 L88 96 Z" fill="url(#pl-pot)"></path>
+<path d="M110 96 L132 96 L142 148 L110 148 Z" fill="#000" opacity=".14"></path>
+<path d="M82 112 L138 112" stroke="#6E1E12" stroke-width="5" opacity=".7"></path>
+<path d="M84 90 L136 90 L134 100 L86 100 Z" fill="#C4432C"></path>
+<path d="M110 96 q-26 -8 -30 -42 q24 6 30 42 Z" fill="url(#pl-leaf)"></path>
+<path d="M110 96 q26 -12 26 -46 q-24 10 -26 46 Z" fill="#4E6E24"></path>
+<path d="M110 96 q-10 -26 -2 -50 q12 24 2 50 Z" fill="#8FB24C"></path>
+<path d="M110 96 L110 48" stroke="#3E5A1E" stroke-width="2.4"></path>
+<path d="M92 68 q10 4 16 12 M126 62 q-10 6 -14 14" fill="none" stroke="#3E5A1E" stroke-width="2"></path>
+</svg>

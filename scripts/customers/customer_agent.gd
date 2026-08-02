@@ -27,8 +27,8 @@ func activate(controller: Node, new_uid: int, data: Dictionary) -> void:
 	customer_data = data
 	active = true
 	visible = true
-	position = Vector2(680, -35)
-	target = Vector2(680, 90)
+	position = Vector2(860, -35)
+	target = Vector2(860, 130)
 	patience = float(DataManager.balance.simulation.get("customer_patience", 42.0)) * float(data.get("patience", 1.0)) * (1.0 + GameManager.bonus("customer_patience"))
 	timer = 0.2
 	table = null
@@ -102,7 +102,7 @@ func _process(delta: float) -> void:
 			if timer <= 0.0:
 				restaurant.customer_paid(self)
 				table.start_cleaning()
-				target = Vector2(680, -50)
+				target = Vector2(860, -50)
 				state = CustomerState.LEAVING
 		CustomerState.LEAVING, CustomerState.ANGRY_LEAVING:
 			if _move(step):
@@ -125,15 +125,20 @@ func _become_angry() -> void:
 	if table != null:
 		table.release_immediately()
 	restaurant.customer_angry(self)
-	target = Vector2(680, -50)
+	target = Vector2(860, -50)
 	state = CustomerState.ANGRY_LEAVING
 
 func _draw() -> void:
+	var font := ThemeDB.fallback_font
+	var ink := DataManager.color("ink")
 	var color := DataManager.color("danger") if state == CustomerState.ANGRY_LEAVING else DataManager.color("customer")
-	draw_circle(Vector2.ZERO, 30, color)
-	draw_string(ThemeDB.fallback_font, Vector2(-65, 55), "%s #%d • x%d" % [STATE_NAMES[state], uid, group_size], HORIZONTAL_ALIGNMENT_CENTER, 130, 14, Color("#1A1A1A"))
+	ArtManager.draw_character(self, Rect2(-32, -36, 64, 72), color, "customers")
+	draw_string(font, Vector2(-55, 56), "%s #%d ×%d" % [STATE_NAMES[state], uid, group_size], HORIZONTAL_ALIGNMENT_CENTER, 110, 12, ink)
+	## Once a dish is chosen the guest carries its icon, so the room reads at a glance.
+	if not recipe.is_empty() and state >= CustomerState.WAITING_FOR_FOOD and state <= CustomerState.PAYING:
+		ArtManager.draw_icon(self, str(recipe.get("id", "")), Vector2(0, -76), Vector2(46, 46))
 	if active and state < CustomerState.EATING:
 		var max_patience := float(DataManager.balance.simulation.get("customer_patience", 42.0)) * float(customer_data.get("patience", 1.0)) * (1.0 + GameManager.bonus("customer_patience"))
 		var fraction: float = clamp(patience / max(0.1, max_patience), 0.0, 1.0)
-		draw_rect(Rect2(-35, -47, 70, 8), Color("#5A2222"), true)
-		draw_rect(Rect2(-35, -47, 70 * fraction, 8), DataManager.color("success"), true)
+		var bar := DataManager.color("success") if fraction > 0.5 else (DataManager.color("accent") if fraction > 0.25 else DataManager.color("danger"))
+		ArtManager.draw_meter(self, Rect2(-35, -50, 70, 10), fraction, bar)

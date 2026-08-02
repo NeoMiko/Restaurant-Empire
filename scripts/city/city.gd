@@ -14,13 +14,16 @@ var tutorial_dialog: ConfirmationDialog
 func _ready() -> void:
 	build_shell("City Hub", false)
 	SceneManager.current_scene_id = "city"
+	var header := HBoxContainer.new()
+	header.add_theme_constant_override("separation", 16)
+	body.add_child(header)
 	var intro := Label.new()
 	intro.text = "Choose a destination — your empire grows from every building."
+	intro.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	intro.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	intro.add_theme_font_size_override("font_size", 26)
-	var menu_button := make_button("Save & Main Menu", func() -> void: SaveManager.save_game(); SceneManager.go_to("menu"), Vector2(280, 68))
-	menu_button.set_anchors_preset(Control.PRESET_TOP_RIGHT)
-	body.add_child(menu_button)
-	body.add_child(intro)
+	header.add_child(intro)
+	header.add_child(make_button("Save & Main Menu", func() -> void: SaveManager.save_game(); SceneManager.go_to("menu"), Vector2(300, 68), "btn_back", 42))
 	var grid := GridContainer.new()
 	grid.columns = 4
 	grid.size_flags_vertical = Control.SIZE_EXPAND_FILL
@@ -33,18 +36,53 @@ func _ready() -> void:
 		var unlocked: bool = reputation >= required
 		if unlocked and str(building.id) not in GameManager.state.unlocked_buildings:
 			GameManager.state.unlocked_buildings.append(str(building.id))
-		var button := Button.new()
-		button.text = "%s\n%s" % [str(building.name), "OPEN" if unlocked else "LOCKED — %d ★" % required]
-		button.custom_minimum_size = Vector2(430, 270)
-		button.add_theme_font_size_override("font_size", 28)
-		button.disabled = not unlocked
-		var style := panel_style(Color(str(building.color)), 20)
-		button.add_theme_stylebox_override("normal", style)
-		var scene_id := str(building.scene)
-		button.pressed.connect(func() -> void: SceneManager.go_to(scene_id))
-		grid.add_child(button)
+		grid.add_child(_building_card(building, unlocked, required))
 	_show_offline_popup()
 	call_deferred("_show_tutorial")
+
+## A card is an outlined tile with the building sprite as the hero, name and unlock state
+## stacked underneath — rather than a button with an icon glued to its left edge.
+func _building_card(building: Dictionary, unlocked: bool, required: int) -> Button:
+	var button := Button.new()
+	button.custom_minimum_size = Vector2(430, 270)
+	button.clip_contents = true
+	button.disabled = not unlocked
+	button.tooltip_text = str(building.name)
+	var tint := Color(str(building.color)) if unlocked else DataManager.color("locked")
+	button.add_theme_stylebox_override("normal", panel_style(tint, 20, 4))
+	button.add_theme_stylebox_override("hover", panel_style(tint.lightened(0.15), 20, 4))
+	button.add_theme_stylebox_override("pressed", panel_style(tint.darkened(0.2), 20, 4))
+	button.add_theme_stylebox_override("disabled", panel_style(tint, 20, 4))
+	if unlocked:
+		var scene_id := str(building.scene)
+		button.pressed.connect(func() -> void: SceneManager.go_to(scene_id))
+
+	var margin := MarginContainer.new()
+	margin.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	margin.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	for side in ["left", "right", "top", "bottom"]:
+		margin.add_theme_constant_override("margin_" + side, 18)
+	button.add_child(margin)
+	var stack := VBoxContainer.new()
+	stack.alignment = BoxContainer.ALIGNMENT_CENTER
+	stack.add_theme_constant_override("separation", 6)
+	stack.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	margin.add_child(stack)
+	stack.add_child(ArtManager.icon_rect(str(building.id) if unlocked else "slot_locked", Vector2(0, 148)))
+	var name_label := Label.new()
+	name_label.text = str(building.name)
+	name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	name_label.add_theme_font_size_override("font_size", 28)
+	name_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	stack.add_child(name_label)
+	var status := Label.new()
+	status.text = "OPEN" if unlocked else "LOCKED — %d reputation" % required
+	status.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	status.add_theme_font_size_override("font_size", 20)
+	status.add_theme_color_override("font_color", DataManager.color("text") if unlocked else DataManager.color("muted"))
+	status.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	stack.add_child(status)
+	return button
 
 func _show_tutorial() -> void:
 	if bool(GameManager.state.get("tutorial", {}).get("completed", false)):

@@ -54,12 +54,14 @@
     {"id":"daily_income","name":"Daily Income","description":"Earn 500 coins today","stat":"coins_earned","target":500,"reward_currency":"diamonds","reward":2}
   ],
   "theme": {
-    "background":"#14222D","panel":"#203645","panel_alt":"#294A55",
-    "accent":"#F1B24A","success":"#6BCB77","danger":"#FF6B6B",
-    "text":"#F4F7F5","muted":"#AFC3C9","customer":"#79D8F2",
-    "chef":"#FF8FA3","waiter":"#8E9BFF","cashier":"#FFD166",
-    "cleaner":"#7AE7C7","table_free":"#8D6E63","table_busy":"#D97757",
-    "kitchen":"#694873","counter":"#C89B7B","locked":"#46535B"
+    "background":"#2A1B10","panel":"#43301C","panel_alt":"#5A4028",
+    "accent":"#E0A32E","success":"#8FB04A","danger":"#D14A32",
+    "text":"#F7EFD9","muted":"#BCA786","customer":"#4E7FA8",
+    "chef":"#C0492F","waiter":"#3F6E5A","cashier":"#B8892C",
+    "cleaner":"#5C7A8C","table_free":"#8A5A2B","table_busy":"#C77A3A",
+    "kitchen":"#4A3524","counter":"#C08A4A","locked":"#584B3C",
+    "outline":"#2A1810","parchment":"#EDD9A8","parchment_alt":"#DCC28C",
+    "ink":"#2A1810"
   },
   "fertilisers": [
     {"id":"basic_fertiliser","name":"Basic Fertiliser","cost":35,"reduction":0.25,"currency":"coins"},
@@ -95,14 +97,14 @@
     {"id":"offline_earnings","name":"Offline Earnings","base":180,"max":30,"value":0.08}
   ],
   "buildings": [
-    {"id":"restaurant","name":"Restaurant","scene":"restaurant","reputation":0,"color":"#E76F51"},
-    {"id":"garden","name":"Garden","scene":"garden","reputation":0,"color":"#6A994E"},
-    {"id":"bazaar","name":"Bazaar","scene":"bazaar","reputation":0,"color":"#DDA15E"},
-    {"id":"shop","name":"Shop","scene":"shop","reputation":0,"color":"#577590"},
-    {"id":"house","name":"House","scene":"house","reputation":0,"color":"#BC6C8E"},
-    {"id":"fairy","name":"Fairy","scene":"fairy","reputation":0,"color":"#9B5DE5"},
-    {"id":"office","name":"Employment Office","scene":"office","reputation":0,"color":"#457B9D"},
-    {"id":"item_shop","name":"Item Shop","scene":"shop","reputation":10,"color":"#F4A261"},
-    {"id":"progression","name":"Legacy Hall","scene":"progression","reputation":0,"color":"#6D597A"}
+    {"id":"restaurant","name":"Restaurant","scene":"restaurant","reputation":0,"color":"#8E2E1C"},
+    {"id":"garden","name":"Garden","scene":"garden","reputation":0,"color":"#55702F"},
+    {"id":"bazaar","name":"Bazaar","scene":"bazaar","reputation":0,"color":"#A9702F"},
+    {"id":"shop","name":"Shop","scene":"shop","reputation":0,"color":"#4E6274"},
+    {"id":"house","name":"House","scene":"house","reputation":0,"color":"#7A4A5E"},
+    {"id":"fairy","name":"Fairy","scene":"fairy","reputation":0,"color":"#6B4A8C"},
+    {"id":"office","name":"Employment Office","scene":"office","reputation":0,"color":"#3F5E74"},
+    {"id":"item_shop","name":"Item Shop","scene":"shop","reputation":10,"color":"#C08A4A"},
+    {"id":"progression","name":"Legacy Hall","scene":"progression","reputation":0,"color":"#5C4A6B"}
   ]
 }

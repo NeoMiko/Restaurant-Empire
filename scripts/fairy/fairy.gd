@@ -6,9 +6,15 @@ var active_label: Label
 func _ready() -> void:
 	build_shell("Fairy Blessings")
 	SceneManager.current_scene_id = "fairy"
+	var header := HBoxContainer.new()
+	header.add_theme_constant_override("separation", 12)
+	body.add_child(header)
+	header.add_child(ArtManager.icon_rect("fairy", Vector2(64, 64)))
 	active_label = Label.new()
+	active_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	active_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	active_label.add_theme_font_size_override("font_size", 24)
-	body.add_child(active_label)
+	header.add_child(active_label)
 	var scroll := ScrollContainer.new()
 	scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	body.add_child(scroll)
@@ -37,17 +43,14 @@ func _refresh() -> void:
 	for item in DataManager.balance.get("blessings", []):
 		var id := str(item.id)
 		var active: bool = GameManager.blessing(str(item.stat)) > 0.0
-		var panel := PanelContainer.new()
-		panel.add_theme_stylebox_override("panel", panel_style(DataManager.color("panel"), 12))
-		list.add_child(panel)
-		var row := HBoxContainer.new()
-		panel.add_child(row)
+		var row := art_row(list, ArtManager.stat_icon(str(item.stat)))
 		var label := Label.new()
 		label.text = "%s\n+%.0f%% %s • %s" % [str(item.name), float(item.value) * 100.0, str(item.stat).replace("_", " "), UIManager.format_time(float(item.duration))]
 		label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 		label.add_theme_font_size_override("font_size", 23)
 		row.add_child(label)
-		var button := make_button("ACTIVE" if active else "Bless — %d ◆" % int(item.cost), func() -> void: _buy(id), Vector2(280, 72))
+		var button := make_button("ACTIVE" if active else "Bless — %d" % int(item.cost), func() -> void: _buy(id), Vector2(280, 72), "" if active else "hud_diamonds", 36)
 		button.disabled = active
 		row.add_child(button)
 

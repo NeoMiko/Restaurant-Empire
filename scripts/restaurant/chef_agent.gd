@@ -10,7 +10,7 @@ var total := 1.0
 
 func setup(controller: Node) -> void:
 	restaurant = controller
-	position = Vector2(220, 720)
+	position = Vector2(320, 680)
 	queue_redraw()
 
 func _process(delta: float) -> void:
@@ -30,10 +30,12 @@ func _process(delta: float) -> void:
 	queue_redraw()
 
 func _draw() -> void:
-	draw_rect(Rect2(-55, -45, 110, 90), DataManager.color("chef"), true)
-	draw_string(ThemeDB.fallback_font, Vector2(-42, 5), "CHEF", HORIZONTAL_ALIGNMENT_CENTER, 84, 20, Color("#222222"))
-	if state == ChefState.COOKING:
-		draw_rect(Rect2(-55, 55, 110, 12), Color("#1D2630"), true)
-		var progress: float = clamp(1.0 - remaining / max(0.01, total), 0.0, 1.0)
-		draw_rect(Rect2(-55, 55, 110 * progress, 12), DataManager.color("success"), true)
-		draw_string(ThemeDB.fallback_font, Vector2(-65, 88), str(current_order.get("recipe_name", "")), HORIZONTAL_ALIGNMENT_CENTER, 130, 16, Color.WHITE)
+	var font := ThemeDB.fallback_font
+	ArtManager.draw_character(self, Rect2(-42, -46, 84, 92), DataManager.color("chef"), "chef_speed")
+	draw_string(font, Vector2(-42, 62), "CHEF", HORIZONTAL_ALIGNMENT_CENTER, 84, 16, DataManager.color("parchment"))
+	if state != ChefState.COOKING:
+		return
+	## The dish being cooked shows as its own icon above the cook's head.
+	ArtManager.draw_icon(self, str(current_order.get("recipe_id", "")), Vector2(0, -72), Vector2(46, 46))
+	var progress: float = clamp(1.0 - remaining / max(0.01, total), 0.0, 1.0)
+	ArtManager.draw_meter(self, Rect2(-42, 70, 84, 12), progress, DataManager.color("success"))

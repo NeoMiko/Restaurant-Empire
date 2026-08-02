@@ -31,13 +31,9 @@ func _tab(title: String) -> VBoxContainer:
 	scroll.add_child(list)
 	return list
 
-func _row(parent: Control, title: String, description: String, progress: int, target: int, button_text: String, callback: Callable, disabled: bool) -> void:
-	var panel := PanelContainer.new()
-	panel.add_theme_stylebox_override("panel", panel_style(DataManager.color("panel"), 12))
-	parent.add_child(panel)
-	var row := HBoxContainer.new()
+func _row(parent: Control, icon_id: String, title: String, description: String, progress: int, target: int, button_text: String, callback: Callable, disabled: bool) -> void:
+	var row := art_row(parent, icon_id, 84)
 	row.add_theme_constant_override("separation", 18)
-	panel.add_child(row)
 	var text_box := VBoxContainer.new()
 	text_box.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	row.add_child(text_box)
@@ -65,17 +61,22 @@ func _row(parent: Control, title: String, description: String, progress: int, ta
 
 func _build_prestige() -> void:
 	var list := _tab("Prestige Tree")
+	var header := HBoxContainer.new()
+	header.add_theme_constant_override("separation", 12)
+	list.add_child(header)
+	header.add_child(ArtManager.icon_rect("hud_prestige_tokens", Vector2(56, 56)))
 	var summary := Label.new()
 	summary.text = "PRESTIGE TOKENS: %d  •  Permanent bonuses survive every reset" % EconomyManager.balance("prestige_tokens")
+	summary.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	summary.add_theme_font_size_override("font_size", 28)
-	list.add_child(summary)
+	header.add_child(summary)
 	for item in DataManager.balance.get("prestige_nodes", []):
 		var id := str(item.id)
 		var level := GameManager.prestige_node_level(id)
 		var maximum := int(item.max)
 		var cost := EconomyManager.prestige_node_cost(id)
 		var description := "%s • +%.0f%% per level" % [str(item.description), float(item.value) * 100.0]
-		_row(list, "%s  Lv.%d/%d" % [str(item.name), level, maximum], description, level, maximum, "MAX" if level >= maximum else "Upgrade — %d tokens" % cost, func() -> void: _buy_node(id), level >= maximum or EconomyManager.balance("prestige_tokens") < cost)
+		_row(list, ArtManager.stat_icon(str(item.stat)), "%s  Lv.%d/%d" % [str(item.name), level, maximum], description, level, maximum, "MAX" if level >= maximum else "Upgrade — %d tokens" % cost, func() -> void: _buy_node(id), level >= maximum or EconomyManager.balance("prestige_tokens") < cost)
 
 func _build_daily() -> void:
 	var list := _tab("Daily Quests")
@@ -90,7 +91,7 @@ func _build_daily() -> void:
 		var entry: Dictionary = GameManager.state.daily_quests.entries.get(id, {})
 		var claimed := bool(entry.get("claimed", false))
 		var reward_text := "%d %s" % [int(item.reward), str(item.reward_currency).replace("_", " ")]
-		_row(list, str(item.name), "%s • Reward: %s" % [str(item.description), reward_text], progress, target, "CLAIMED" if claimed else "Claim reward", func() -> void: _claim_daily(id), claimed or progress < target)
+		_row(list, ArtManager.stat_icon(str(item.stat)), str(item.name), "%s • Reward: %s" % [str(item.description), reward_text], progress, target, "CLAIMED" if claimed else "Claim reward", func() -> void: _claim_daily(id), claimed or progress < target)
 
 func _build_achievements() -> void:
 	var list := _tab("Achievements")
@@ -100,7 +101,7 @@ func _build_achievements() -> void:
 		var target := int(item.target)
 		var claimed := bool(GameManager.state.get("achievements", {}).get(id, false))
 		var reward_text := "%d %s" % [int(item.reward), str(item.reward_currency).replace("_", " ")]
-		_row(list, str(item.name), "%s • Reward: %s" % [str(item.description), reward_text], progress, target, "CLAIMED" if claimed else "Claim reward", func() -> void: _claim_achievement(id), claimed or progress < target)
+		_row(list, ArtManager.stat_icon(str(item.stat)), str(item.name), "%s • Reward: %s" % [str(item.description), reward_text], progress, target, "CLAIMED" if claimed else "Claim reward", func() -> void: _claim_achievement(id), claimed or progress < target)
 
 func _buy_node(id: String) -> void:
 	if EconomyManager.purchase_prestige_node(id):

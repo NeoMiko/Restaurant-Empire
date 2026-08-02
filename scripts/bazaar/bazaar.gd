@@ -8,12 +8,15 @@ func _ready() -> void:
 	SceneManager.current_scene_id = "bazaar"
 	_refresh_market_if_needed()
 	var header := HBoxContainer.new()
+	header.add_theme_constant_override("separation", 12)
 	body.add_child(header)
+	header.add_child(ArtManager.icon_rect("bazaar", Vector2(56, 56)))
 	summary = Label.new()
 	summary.add_theme_font_size_override("font_size", 24)
+	summary.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	summary.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	header.add_child(summary)
-	header.add_child(make_button("Sell Everything", _sell_everything, Vector2(260, 68)))
+	header.add_child(make_button("Sell Everything", _sell_everything, Vector2(300, 68), "hud_coins", 42))
 	var scroll := ScrollContainer.new()
 	scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	body.add_child(scroll)
@@ -46,25 +49,24 @@ func _rebuild() -> void:
 		var multiplier := float(GameManager.state.market.multipliers.get(id, 1.0))
 		var price := int(round(float(crop.value) * multiplier))
 		total_value += owned * price
-		var row := PanelContainer.new()
-		row.add_theme_stylebox_override("panel", panel_style(DataManager.color("panel"), 10))
-		list.add_child(row)
-		var columns := HBoxContainer.new()
+		var columns := art_row(list, id)
 		columns.add_theme_constant_override("separation", 20)
-		row.add_child(columns)
 		var name_label := Label.new()
 		name_label.text = str(crop.name)
-		name_label.custom_minimum_size.x = 300
+		name_label.custom_minimum_size.x = 260
+		name_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 		name_label.add_theme_font_size_override("font_size", 24)
 		columns.add_child(name_label)
 		var stock := Label.new()
 		stock.text = "Owned: %d" % owned
 		stock.custom_minimum_size.x = 220
+		stock.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 		columns.add_child(stock)
 		var indicator := "LOW" if multiplier < 0.9 else ("HIGH" if multiplier > 1.1 else "NORMAL")
 		var price_label := Label.new()
 		price_label.text = "%d coins each — %s" % [price, indicator]
 		price_label.custom_minimum_size.x = 360
+		price_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 		price_label.add_theme_color_override("font_color", DataManager.color("danger") if indicator == "LOW" else (DataManager.color("success") if indicator == "HIGH" else DataManager.color("text")))
 		columns.add_child(price_label)
 		var quantity := SpinBox.new()

@@ -1,8 +1,28 @@
 # Restaurant Empire — prototyp Godot 4.6.3
 
 Restaurant Empire jest mobilnym tycoonem 2D łączącym automatyczną restaurację,
-ogród, handel, kolekcję pracowników, gacha i progresję offline. Wszystkie grafiki
-są figurami generowanymi w Godot; logika nie zależy od placeholderów.
+ogród, handel, kolekcję pracowników, gacha i progresję offline.
+
+## Grafika
+
+`assets/` zawiera pakiet 67 sprite'ów w stylu anime-medieval (`assets/svg/` oraz
+identyczny zestaw `assets/png/`). Nazwy plików odpowiadają identyfikatorom z
+`data/configs/*.json`, więc grafika wynika wprost z danych.
+
+- **SVG jest formatem wydawniczym**: 230 KB wobec 6,6 MB dla PNG i skaluje się
+  bezstratnie. `assets/png/*` jest wykluczone z eksportu w `export_presets.cfg`,
+  więc każdy identyfikator musi istnieć jako SVG.
+- Import SVG ma włączone mipmapy — sprite'y mają 440–900 px, a wyświetlane są
+  przy 38–150 px, więc bez mipmap pojawia się aliasing.
+- Cały dostęp do grafiki prowadzi przez autoload `ArtManager`, który cache'uje
+  tekstury i mapuje identyfikatory danych bez własnego sprite'a (np. ulepszenia,
+  statystyki, role pracowników) na najbliższą dostępną ikonę.
+- Paleta w bloku `theme` w `balance.json` została dopasowana do pakietu. Klucz
+  `outline` (`#2A1810`) obrysowuje panele i przyciski tym samym konturem, co
+  sprite'y — to on spina płaskie UI z cel-shadingiem.
+- Pakiet nie zawiera sprite'ów postaci. Kucharze, kelnerzy i goście są rysowani
+  jako obrysowane sylwetki w kolorach palety z ikoną pakietu w środku oraz —
+  gdy niosą lub jedzą danie — z ikoną tej potrawy.
 
 ## Uruchomienie
 
@@ -79,6 +99,17 @@ $godot = "C:\Users\Kamil\OneDrive\Escritorio\Godot_v4.6.3-stable_win64.exe"
 
 Oczekiwane wyniki: `CORE_TESTS_PASS checks=71`,
 `SCENE_MATRIX_PASS scenes=13` i `RESTAURANT_SMOKE_PASS served>=1 coins>500`.
+
+Zrzuty ekranu wszystkich jedenastu ekranów zapisuje `res://tests/screenshots.tscn`.
+Wymaga kontekstu renderowania, więc uruchamia się **bez** `--headless`:
+
+```powershell
+& $godot --path . --resolution 1280x720 res://tests/screenshots.tscn
+```
+
+Wynik: `tmp/screenshots/*.png` (katalog jest w `.gitignore`). Scena wymusza
+ukończony tutorial, zasiewa cztery pola ogrodu i czeka szesnaście sekund na
+restauracji, żeby na zrzucie widać było kucharza przy pracy i zajęte stoliki.
 
 ## Android
 

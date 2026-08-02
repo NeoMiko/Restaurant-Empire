@@ -6,7 +6,7 @@ var restaurant: Node
 var state: WaiterState = WaiterState.IDLE
 var dishes: Array[Dictionary] = []
 var target := Vector2.ZERO
-var idle_position := Vector2(1180, 745)
+var idle_position := Vector2(1270, 700)
 
 func setup(controller: Node) -> void:
 	restaurant = controller
@@ -50,9 +50,15 @@ func _advance_delivery() -> void:
 	target = idle_position
 
 func _draw() -> void:
-	draw_rect(Rect2(-42, -55, 84, 110), DataManager.color("waiter"), true)
-	draw_string(ThemeDB.fallback_font, Vector2(-38, 5), "WAITER", HORIZONTAL_ALIGNMENT_CENTER, 76, 17, Color("#1A1A1A"))
-	for index in min(dishes.size(), 6):
-		draw_circle(Vector2(-30 + index * 12, -70), 10, DataManager.color("accent"))
-	if not dishes.is_empty():
-		draw_string(ThemeDB.fallback_font, Vector2(-45, -88), "TRAY %d/%d" % [dishes.size(), 1 + GameManager.upgrade_level("waiter_capacity")], HORIZONTAL_ALIGNMENT_CENTER, 90, 12, Color.WHITE)
+	var font := ThemeDB.fallback_font
+	ArtManager.draw_character(self, Rect2(-44, -55, 88, 110), DataManager.color("waiter"), "waiter_tray")
+	draw_string(font, Vector2(-44, 74), "WAITER", HORIZONTAL_ALIGNMENT_CENTER, 88, 17, DataManager.color("ink"))
+	if dishes.is_empty():
+		return
+	## The tray shows what is actually being carried.
+	var carried: int = min(dishes.size(), 4)
+	for index in carried:
+		var offset := Vector2((index - (carried - 1) * 0.5) * 42.0, -82.0)
+		if not ArtManager.draw_icon(self, str(dishes[index].get("recipe_id", "")), offset, Vector2(38, 38)):
+			draw_circle(offset, 10, DataManager.color("accent"))
+	draw_string(font, Vector2(-55, -104), "TRAY %d/%d" % [dishes.size(), 1 + GameManager.upgrade_level("waiter_capacity")], HORIZONTAL_ALIGNMENT_CENTER, 110, 14, DataManager.color("ink"))

@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="880" height="680" viewBox="0 0 220 170">
+<defs><radialGradient id="lm-halo" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#FFC24A" stop-opacity=".5"></stop><stop offset="1" stop-color="#FFC24A" stop-opacity="0"></stop></radialGradient><linearGradient id="lm-metal" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#C4BAA6"></stop><stop offset=".5" stop-color="#8A8072"></stop><stop offset="1" stop-color="#4E463A"></stop></linearGradient></defs>
+<circle cx="110" cy="66" r="70" fill="url(#lm-halo)"></circle>
+<path d="M74 152 L146 152 L130 124 L90 124 Z" fill="url(#lm-metal)"></path>
+<path d="M110 124 L130 124 L146 152 L110 152 Z" fill="#000" opacity=".18"></path>
+<path d="M96 76 L124 76 L124 124 L96 124 Z" fill="#F2E9D6"></path>
+<path d="M112 76 L124 76 L124 124 L112 124 Z" fill="#D8C8A8"></path>
+<path d="M110 76 L110 58" stroke="#8A7A5A" stroke-width="3"></path>
+<path d="M110 20 q-18 24 0 38 q18 -14 0 -38" fill="#FFD87A" style="animation:flicker 1.3s ease-in-out infinite;transform-origin:110px 58px"></path>
+<path d="M110 32 q-8 14 0 22 q8 -8 0 -22" fill="#FFF6DA" style="animation:flicker .9s ease-in-out infinite;transform-origin:110px 58px"></path>
+<path d="M80 92 q-14 8 -12 24 M140 92 q14 8 12 24" fill="none" stroke="#8A8072" stroke-width="4" stroke-linecap="round"></path>
+</svg>

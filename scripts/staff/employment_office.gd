@@ -1,5 +1,13 @@
 extends BaseScreen
 
+const RARITY_COLORS := {
+	"Common": "#7A6A52",
+	"Rare": "#4E7FA8",
+	"Epic": "#6B4A8C",
+	"Legendary": "#E0A32E",
+	"Mythic": "#C0492F"
+}
+
 var pity_label: Label
 var results_label: Label
 var collection_list: VBoxContainer
@@ -15,10 +23,15 @@ func _ready() -> void:
 	recruit.custom_minimum_size.x = 650
 	recruit.add_theme_constant_override("separation", 16)
 	split.add_child(recruit)
-	var heading := Label.new()
-	heading.text = "RECRUIT STAFF"
-	heading.add_theme_font_size_override("font_size", 32)
+	var heading := HBoxContainer.new()
+	heading.add_theme_constant_override("separation", 12)
 	recruit.add_child(heading)
+	heading.add_child(ArtManager.icon_rect("office", Vector2(64, 64)))
+	var heading_label := Label.new()
+	heading_label.text = "RECRUIT STAFF"
+	heading_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	heading_label.add_theme_font_size_override("font_size", 32)
+	heading.add_child(heading_label)
 	var rates := Label.new()
 	rates.text = "Common 70% • Rare 20% • Epic 7%\nLegendary 2.5% • Mythic 0.5%"
 	rates.add_theme_font_size_override("font_size", 22)
@@ -26,8 +39,8 @@ func _ready() -> void:
 	pity_label = Label.new()
 	pity_label.add_theme_font_size_override("font_size", 24)
 	recruit.add_child(pity_label)
-	recruit.add_child(make_button("Recruit ×1 — 1 Ticket", func() -> void: _roll_ui(1), Vector2(460, 78)))
-	recruit.add_child(make_button("Recruit ×10 — 10 Tickets", func() -> void: _roll_ui(10), Vector2(460, 78)))
+	recruit.add_child(make_button("Recruit ×1 — 1 Ticket", func() -> void: _roll_ui(1), Vector2(460, 78), "hud_gacha_tickets", 46))
+	recruit.add_child(make_button("Recruit ×10 — 10 Tickets", func() -> void: _roll_ui(10), Vector2(460, 78), "hud_gacha_tickets", 46))
 	results_label = Label.new()
 	results_label.text = "Results appear here."
 	results_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
@@ -116,10 +129,24 @@ func _refresh() -> void:
 		var id := str(employee.id)
 		var owned: bool = GameManager.state.staff_collection.has(id)
 		var copies := int(GameManager.state.staff_collection.get(id, {}).get("count", 0))
+		var rarity := str(employee.rarity)
 		var panel := PanelContainer.new()
-		panel.add_theme_stylebox_override("panel", panel_style(DataManager.color("panel") if owned else DataManager.color("locked"), 10))
+		var style := panel_style(DataManager.color("panel") if owned else DataManager.color("locked"), 10)
+		## Rarity reads off the card edge rather than only out of the label text.
+		if owned:
+			style.set_border_width_all(3)
+			style.border_color = Color(str(RARITY_COLORS.get(rarity, "#7A6A52")))
 		collection_list.add_child(panel)
+		panel.add_theme_stylebox_override("panel", style)
+		var row := HBoxContainer.new()
+		row.add_theme_constant_override("separation", 14)
+		panel.add_child(row)
+		var portrait := ArtManager.icon_rect(ArtManager.role_icon(str(employee.role)) if owned else "slot_locked", Vector2(64, 64))
+		portrait.modulate.a = 1.0 if owned else 0.6
+		row.add_child(portrait)
 		var label := Label.new()
-		label.text = "%s  [%s]  %s\nSpeed %.2f • Capacity %d • %s%s" % [str(employee.name) if owned else "???", str(employee.rarity), str(employee.role), float(employee.speed), int(employee.capacity), str(employee.passive), " • Copies %d" % copies if owned else ""]
+		label.text = "%s  [%s]  %s\nSpeed %.2f • Capacity %d • %s%s" % [str(employee.name) if owned else "???", rarity, str(employee.role), float(employee.speed), int(employee.capacity), str(employee.passive), " • Copies %d" % copies if owned else ""]
+		label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 		label.add_theme_font_size_override("font_size", 20)
-		panel.add_child(label)
+		row.add_child(label)

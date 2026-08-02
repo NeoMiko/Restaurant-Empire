@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="520" viewBox="0 0 160 130">
+<defs><radialGradient id="pz-crust" cx=".4" cy=".3" r=".8"><stop offset="0" stop-color="#F0CE8C"></stop><stop offset=".6" stop-color="#D2A455"></stop><stop offset="1" stop-color="#96701F"></stop></radialGradient><radialGradient id="pz-sauce" cx=".4" cy=".3" r=".8"><stop offset="0" stop-color="#E06848"></stop><stop offset=".6" stop-color="#C4432C"></stop><stop offset="1" stop-color="#8E2418"></stop></radialGradient></defs>
+<ellipse cx="80" cy="106" rx="60" ry="16" fill="#7A5024" opacity=".45"></ellipse>
+<ellipse cx="80" cy="82" rx="66" ry="26" fill="#96701F"></ellipse>
+<ellipse cx="80" cy="76" rx="66" ry="26" fill="url(#pz-crust)"></ellipse>
+<ellipse cx="80" cy="74" rx="52" ry="19" fill="url(#pz-sauce)"></ellipse>
+<g stroke="#8E2418" stroke-width="2" opacity=".7"><path d="M80 55 L80 93 M28 74 L132 74 M44 62 L116 88 M44 88 L116 62"></path></g>
+<ellipse cx="56" cy="68" rx="7" ry="4.4" fill="#FBF0D2"></ellipse>
+<ellipse cx="98" cy="80" rx="7" ry="4.4" fill="#FBF0D2"></ellipse>
+<ellipse cx="100" cy="64" rx="6" ry="3.8" fill="#F5E4B8"></ellipse>
+<ellipse cx="64" cy="84" rx="6" ry="3.6" fill="#F5E4B8"></ellipse>
+<ellipse cx="80" cy="70" rx="5" ry="3.2" fill="#6E8C3A"></ellipse>
+<ellipse cx="60" cy="60" rx="16" ry="5" fill="#FFF" opacity=".14"></ellipse>
+</svg>

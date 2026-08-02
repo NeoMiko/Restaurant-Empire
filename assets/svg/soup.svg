@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="520" viewBox="0 0 160 130">
+<defs><linearGradient id="so-pot" x1="0" y1="0" x2="1" y2=".3"><stop offset="0" stop-color="#B4A894"></stop><stop offset=".5" stop-color="#7A7062"></stop><stop offset="1" stop-color="#42392E"></stop></linearGradient></defs>
+<ellipse cx="80" cy="114" rx="54" ry="11" fill="#7A5024" opacity=".45"></ellipse>
+<path d="M28 56 L132 56 L120 108 L40 108 Z" fill="url(#so-pot)"></path>
+<path d="M80 56 L132 56 L120 108 L80 108 Z" fill="#000" opacity=".16"></path>
+<path d="M22 50 L138 50 L138 60 L22 60 Z" fill="#8A8072"></path>
+<ellipse cx="80" cy="54" rx="46" ry="9" fill="#C4843A"></ellipse>
+<ellipse cx="80" cy="53" rx="34" ry="6" fill="#D89A50" opacity=".7"></ellipse>
+<ellipse cx="66" cy="52" rx="6" ry="2.6" fill="#E0A32E"></ellipse><ellipse cx="92" cy="55" rx="5" ry="2.4" fill="#8FB24C"></ellipse>
+<path d="M16 62 q-14 12 0 24 M144 62 q14 12 0 24" fill="none" stroke="#5E5648" stroke-width="6" stroke-linecap="round"></path>
+<path d="M28 68 L132 68" stroke="#5E5648" stroke-width="4" opacity=".6"></path>
+<path d="M80 34 q-10 -16 2 -26 M62 38 q-8 -12 2 -20 M98 36 q8 -12 0 -20" fill="none" stroke="#E4D8BC" stroke-width="6" stroke-linecap="round" opacity=".6" style="animation:steam 2.8s ease-out infinite"></path>
+</svg>

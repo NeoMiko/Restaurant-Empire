@@ -28,6 +28,7 @@ UIManager="*res://scripts/autoload/ui_manager.gd"
 NotificationManager="*res://scripts/autoload/notification_manager.gd"
 AudioManager="*res://scripts/autoload/audio_manager.gd"
 DebugManager="*res://scripts/autoload/debug_manager.gd"
+ArtManager="*res://scripts/autoload/art_manager.gd"
 
 [display]
 

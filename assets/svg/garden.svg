@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="831" viewBox="0 0 260 240">
+<defs>
+<linearGradient id="g1-soil" x1="0" y1="0" x2=".3" y2="1"><stop offset="0" stop-color="#6E4A26"></stop><stop offset=".5" stop-color="#4E3418"></stop><stop offset="1" stop-color="#2E2010"></stop></linearGradient>
+<linearGradient id="g1-leaf" x1="0" y1="0" x2=".4" y2="1"><stop offset="0" stop-color="#A8CC5E"></stop><stop offset=".5" stop-color="#6E8C3A"></stop><stop offset="1" stop-color="#3E5A1E"></stop></linearGradient>
+<linearGradient id="g1-wood" x1="0" y1="0" x2="1" y2=".5"><stop offset="0" stop-color="#A5783C"></stop><stop offset="1" stop-color="#5E4018"></stop></linearGradient>
+</defs>
+<ellipse cx="130" cy="222" rx="108" ry="12" fill="#0E0904" opacity=".45"></ellipse>
+<path d="M22 214 L44 132 L216 132 L238 214 Z" fill="url(#g1-soil)"></path>
+<g opacity=".55"><path d="M44 148 L216 148 M38 170 L222 170 M32 192 L228 192" stroke="#2A1C0C" stroke-width="4"></path><path d="M40 152 L220 152 M34 174 L226 174" stroke="#8A6238" stroke-width="1.6" opacity=".5"></path></g>
+<g stroke="#2A1C0C" stroke-width="1.4" opacity=".5"><path d="M64 132 L52 214 M100 132 L94 214 M160 132 L166 214 M196 132 L208 214"></path></g>
+<g><path d="M70 134 q-16 -30 -2 -50 q18 20 2 50 Z" fill="url(#g1-leaf)"></path><path d="M70 134 q18 -26 6 -48 q-12 22 -6 48 Z" fill="#4E6E24"></path><path d="M68 88 L70 134" stroke="#3E5A1E" stroke-width="2"></path></g>
+<g><path d="M118 132 q-20 -36 -2 -60 q22 26 2 60 Z" fill="url(#g1-leaf)"></path><path d="M118 132 q20 -32 8 -56 q-14 26 -8 56 Z" fill="#4E6E24"></path><circle cx="106" cy="92" r="10" fill="#C4432C"></circle><circle cx="103" cy="89" r="3" fill="#E88A70" opacity=".7"></circle><circle cx="130" cy="104" r="9" fill="#C4432C"></circle><circle cx="127" cy="101" r="2.6" fill="#E88A70" opacity=".7"></circle></g>
+<g><path d="M172 132 q-14 -28 0 -46 q16 18 0 46 Z" fill="url(#g1-leaf)"></path><path d="M172 132 q16 -24 4 -44 q-10 20 -4 44 Z" fill="#4E6E24"></path><circle cx="184" cy="100" r="8" fill="#E0A32E"></circle></g>
+<path d="M198 132 L198 40" stroke="#5E4018" stroke-width="7" stroke-linecap="round"></path>
+<path d="M198 46 L246 58 L198 72 Z" fill="#A6301F"></path>
+<path d="M198 46 L246 58 L198 72 Z" fill="none" stroke="#5E1409" stroke-width="2"></path>
+<path d="M210 50 L232 57 L210 64" fill="none" stroke="#E0A32E" stroke-width="3"></path>
+<g stroke="url(#g1-wood)" stroke-width="7" stroke-linecap="round"><path d="M18 216 L18 176 M242 216 L242 176"></path></g>
+<path d="M12 178 L248 172" stroke="url(#g1-wood)" stroke-width="6" stroke-linecap="round"></path>
+<path d="M12 194 L248 190" stroke="url(#g1-wood)" stroke-width="5" stroke-linecap="round" opacity=".8"></path>
+</svg>
